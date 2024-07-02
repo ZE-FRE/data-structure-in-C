@@ -5,7 +5,7 @@
 BstNode* NewNode(int value)
 {
 	BstNode* node = (BstNode*)malloc(sizeof(BstNode));
-	// ¿Õ¼ä·ÖÅäÊ§°Ü
+	// ç©ºé—´åˆ†é…å¤±è´¥
 	if (!node) return NULL;
 	node->value = value;
 	node->left = NULL;
@@ -22,14 +22,15 @@ void Init(BstTree* treePtr, int arr[], int length)
 void Add(BstTree* treePtr, int value)
 {
 	BstNode* node = *treePtr;
-	// ÕÒµ½½áµãµÄ²åÈëÎ»ÖÃ
+    // çœ‹çœ‹èƒ½å¦åœ¨ç½‘é¡µä¸Šæ·»åŠ 
+	// æ‰¾åˆ°ç»“ç‚¹çš„æ’å…¥ä½ç½®
 	if (*treePtr == NULL)
 		*treePtr = NewNode(value);
 	else if (value < node->value)
 		Add(&node->left, value);
 	else if (value > node->value)
 		Add(&node->right, value);
-	else // ½áµãÖµÖØ¸´
+	else // ç»“ç‚¹å€¼é‡å¤
 		return;
 }
 
@@ -58,7 +59,7 @@ void print(BstNode* node)
 void testBstTree()
 {
 	int arr[] = { 34, 24, 18, 39, 28, 6, 64, 14, 42, 48, 32, 66, 27 };
-	// ÖĞĞò£º6, 14, 18, 24, 27, 28, 32, 34, 39, 42, 48, 64, 66
+	// ä¸­åºï¼š6, 14, 18, 24, 27, 28, 32, 34, 39, 42, 48, 64, 66
 	BstTree bstTree = NULL;
 	Init(&bstTree, arr, 13);
 	InOrder(bstTree, print);
