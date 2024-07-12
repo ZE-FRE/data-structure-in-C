@@ -1,12 +1,19 @@
 #include <stdio.h>
-#include "BstTree.h"
+#include "SqList.h"
+#include "ForwardList.h"
 #include "Stack.h"
+#include "BstTree.h"
+
 
 int main(int argc, char* argv[])
 {
+	//testSqList();
+
+	testForwardList();
+
 	//testStack();
 
-	testBstTree();
+	//testBstTree();
 
 	return 0;
 }
