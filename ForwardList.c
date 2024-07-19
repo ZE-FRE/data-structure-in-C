@@ -188,6 +188,22 @@ void MergeList(ForwardList* La, ForwardList* Lb)
     free(*Lb);
 }
 
+void SortList(ForwardList list)
+{
+    ListNode* minNode = NULL;
+    for (ListNode* p = list->next; p; p = p->next) {
+        minNode = p;
+        for (ListNode* q = p->next; q; q = q->next) 
+            if (q->elem < minNode->elem)
+                minNode = q;
+        if (minNode != p) {
+            ListElemType temp = p->elem;
+            p->elem = minNode->elem;
+            minNode->elem = temp;
+        }
+    }
+}
+
 
 void testForwardList()
 {
@@ -262,4 +278,27 @@ void testForwardList()
     printf("合并后的链表：");
     ListTraverse(La, printListElem);
     DestroyList(&La);
+
+    printf("\n===============\n");
+    printf("SortList：\n");
+    ForwardList L;
+    InitList(&L);
+    ListInsert(L, 1, 4);
+    ListInsert(L, 2, 8);
+    ListInsert(L, 3, 1);
+    ListInsert(L, 4, 28);
+    ListInsert(L, 5, 16);
+    ListInsert(L, 3, 10);
+    ListInsert(L, 2, 8);
+    ListInsert(L, 1, 48);
+    ListInsert(L, 4, 30);
+    printf("链表数据为：");
+    ListTraverse(L, printListElem);
+
+    SortList(L);
+    printf("\n===============\n");
+    printf("选择排序后链表数据为：");
+    ListTraverse(L, printListElem);
+    DestroyList(&L);
 }
+
