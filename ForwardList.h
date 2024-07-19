@@ -45,6 +45,8 @@ void ListTraverse(const ForwardList list, VisitListElem visit);
  */
 void MergeList(ForwardList* La, ForwardList* Lb);
 
+void SortList(ForwardList list);
+
 void testForwardList();
 
 #endif
