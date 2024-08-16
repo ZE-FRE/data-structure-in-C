@@ -341,7 +341,13 @@ void testForwardList()
 
     //testFindListLastK();
 
-    testTwinSum();
+    //testTwinSum();
+
+    //testFindSharedSuffix();
+
+    //testListDeleteAbsDuplicates();
+
+    testRearrangeList();
 
 }
 
@@ -664,6 +670,42 @@ void testListIsSub()
     DestroyList(&Lb);
 }
 
+void linkCyclicList(CyclicNode* h1, CyclicNode* h2)
+{
+    if (!h2) return;
+    CyclicNode* rear_h1 = h1;
+    while (rear_h1->next != h1)
+        rear_h1 = rear_h1->next;
+    rear_h1->next = h2->next;
+    h2->next = h1;
+}
+
+BiListNode* BiListLocate(BiList L, int data)
+{
+    BiListNode* p = L->next;
+    while (p && p->data != data)
+        p = p->next;
+    // 结点值不存在
+    if (!p) return NULL;
+    // 增加访问频度
+    ++p->freq;
+
+    BiListNode* q = p->pre;
+    if (q == L || q->freq > p->freq) // 不用移动
+        return p;
+    // 将p移动到freq相同结点的最前方
+    q->next = p->next;
+    if (p->next)
+        p->next->pre = q;
+    while (q != L && q->freq <= p->freq)
+        q = q->pre;
+    p->next = q->next;
+    p->pre = q;
+    q->next->pre = p;
+    q->next = p; 
+    return p;
+}
+
 void listRightShift(ListNode** node, int k)
 {
     ListNode* first = *node, *pk = first, *p = first;
@@ -841,4 +883,146 @@ void testFindListLastK()
     printf("\n倒数第%d个结点为：%d", k, data);
     DestroyList(&list);
 }
+
+ListNode* findSharedSuffix(ForwardList str1, ForwardList str2)
+{
+    ListNode* p1 = str1->next, * p2 = str2->next;
+    int len1 = ListLength(str1);
+    int len2 = ListLength(str2);
+    // 将p1与p2对齐
+    for (int i = 0; i < len1 - len2; ++i)
+        p1 = p1->next;
+    for (int i = 0; i < len2 - len1; ++i)
+        p2 = p2->next;
+
+    while (p1 && p1 != p2) {
+        p1 = p1->next;
+        p2 = p2->next;
+    }
+    return p1;
+}
+
+void testFindSharedSuffix()
+{
+    int elems_common[] = { 8,9,10 };
+    ForwardList common = createListFromArray(elems_common, sizeof(elems_common) / sizeof(elems_common[0]));
+
+    int elems1[] = { 20,19,18,17,16 };
+    ForwardList La = createListFromArray(elems1, sizeof(elems1) / sizeof(elems1[0]));
+    int elems2[] = { 15,14,13,12,11 };
+    ForwardList Lb = createListFromArray(elems2, sizeof(elems2) / sizeof(elems2[0]));
+
+    ListNode *rear1 = La, *rear2 = Lb;
+    while (rear1->next)
+        rear1 = rear1->next;
+    while (rear2->next)
+        rear2 = rear2->next;
+    rear1->next = common->next;
+    rear2->next = common->next;
+    free(common);
+
+
+    puts("王道18：找出由str1和str2所指向两个链表共同后缀的起始位置。");
+    printf("La=");
+    printList(La);
+    printf("\nLb=");
+    printList(Lb);
+
+    ListNode *p = findSharedSuffix(La, Lb);
+    printf("\n共同后缀的起始值为：%d", p->elem);
+
+    rear2->next = NULL;
+    DestroyList(&La);
+    DestroyList(&Lb);
+}
+
+void listDeleteAbsDuplicates(ForwardList list, unsigned int n)
+{
+    int* arr = (int*)calloc(n + 1, sizeof(int));
+    if (!arr) return;
+    
+    ListNode *pre = list, *p = list->next, *q;
+    while (p) {
+        if (arr[abs(p->elem)]) { // 删除重复的
+            q = p;
+            pre->next = p->next;
+            p = p->next;
+            free(q);
+        }
+        else {
+            // |data|首次出现，设置为1
+            arr[abs(p->elem)] = 1;
+            pre = p;
+            p = p->next;
+        }
+    }
+    // 释放动态数组
+    free(arr);
+}
+
+void testListDeleteAbsDuplicates()
+{
+    int elems[] = { 21,-15,-15,-7,15 };
+    ForwardList list = createListFromArray(elems, sizeof(elems) / sizeof(elems[0]));
+    puts("王道19：保留第一次出现的结点而删除其余绝对值相等的结点。");
+    printf("初始链表：");
+    printList(list);
+    
+    listDeleteAbsDuplicates(list, 21);
+    printf("\n删除绝对值相等的结点后，list=");
+    printList(list);
+
+    DestroyList(&list);
+
+}
+
+void rearrangeList(ForwardList list)
+{
+    ListNode *slow = list, *fast = list;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    ListNode* L2_head = slow;
+
+    // 将L2逆置
+    ListNode* p2 = L2_head->next, *q;
+    L2_head->next = NULL;
+    while (p2) {
+        q = p2;
+        p2 = p2->next;
+        q->next = L2_head->next;
+        L2_head->next = q;
+    }
+
+    ListNode* L1 = list->next, *L1_next;
+    ListNode* L2 = L2_head->next, *L2_next;
+    // 断开L1和L2
+    slow->next = NULL;
+
+    while (L2) {
+        L1_next = L1->next;
+        L2_next = L2->next;
+        L2->next = L1_next;
+        L1->next = L2;
+        L1 = L1_next;
+        L2 = L2_next;
+    }
+
+}
+
+void testRearrangeList()
+{
+    int elems[] = { 1,2,3,4,5,6,7,8,9,10 };
+    ForwardList list = createListFromArray(elems, sizeof(elems) / sizeof(elems[0]));
+    puts("王道20：重排单链表。");
+    printf("初始链表：");
+    printList(list);
+
+    rearrangeList(list);
+    printf("\n重排后的链表：");
+    printList(list);
+    DestroyList(&list);
+}
+
 
