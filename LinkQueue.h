@@ -1,4 +1,4 @@
-#ifndef LINK_QUEUE_H_
+﻿#ifndef LINK_QUEUE_H_
 #define LINK_QUEUE_H_
 
 #include <stdbool.h>

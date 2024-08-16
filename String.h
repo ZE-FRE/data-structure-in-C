@@ -1,4 +1,4 @@
-#ifndef STRING_H_
+﻿#ifndef STRING_H_
 #define STRING_H_
 
 #include <stdbool.h>

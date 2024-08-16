@@ -1,4 +1,4 @@
-#ifndef SHARED_STACK_H_
+﻿#ifndef SHARED_STACK_H_
 #define SHARED_STACK_H_
 
 #include <stdbool.h>
