@@ -1,52 +1,30 @@
-﻿#ifndef BST_TREE_H_
+#ifndef BST_TREE_H_
 #define BST_TREE_H_
 
-#include <stdbool.h>
-
-typedef struct BstNode {
-
-	int value;
-	struct BstNode* left;
-	struct BstNode* right;
-
-	bool visited;
-
-} BstNode, * BstTree;
-
-BstNode* NewNode(int value);
-
-void Init(BstTree* treePtr, int arr[], int length);
-
-void Add(BstTree* treePtr, int value);
-
-void Delete(BstTree* bstTree, int value);
-
-static BstNode* successor(BstNode* bstNode);
+#include "BiTree.h"
 
 /*
- * 非递归先序遍历
+ * 二叉排序树
+ * date:2024/8/23
  */
-void PreOrder(BstTree bstTree, void (*funcptr)(BstNode* node));
+typedef BiElemType BstElemType;
+typedef BiNode BstNode, *BstTree;
 
-void InOrderRecur(BstTree bstTree, void (*funcptr)(BstNode* node));
+void InitBstTree(BstTree* treePtr, BstElemType arr[], int length);
+
+/* 
+ * 递归方式插入
+ */
+void BstInsertRecur(BstTree* treePtr, BstElemType elem);
 
 /*
- * 非递归中序遍历
+ * 非递归方式插入
  */
-void InOrder(BstTree bstTree, void (*funcptr)(BstNode* node));
-/*
- * 非递归后序遍历
- */
-void PostOrder(BstTree bstTree, void (*funcptr)(BstNode* node));
+void BstInsert(BstTree* treePtr, BstElemType elem);
 
-void Destroy(BstTree bstTree);
+void BstDelete(BstTree* bstTree, BstElemType value);
 
-static void printBstNode(BstNode* node);
-
-void testPreOrder();
-void testInOrderRecur();
-void testInOrder();
-void testPostOrder();
+static void testBstDelete();
 
 void testBstTree();
 
