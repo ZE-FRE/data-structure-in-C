@@ -1,4 +1,4 @@
-﻿#include "Queue.h"
+#include "Queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -98,7 +98,7 @@ void QueueTraverse(const Queue* queue)
 
 void testQueue()
 {
-    Queue queue;
+   /* Queue queue;
     InitQueue(&queue);
     for (int i = 1; i <= 11; ++i)
         EnQueue(&queue, i);
@@ -121,5 +121,44 @@ void testQueue()
         if (DeQueue(&queue, &data))
             printf("%d ", data);
     
+    DestroyQueue(&queue);*/
+
+    testReverseQueue();
+
+}
+
+void reverseQueue(Queue *Q, StackImpl2 *S)
+{
+    int data;
+    // 队列元素出队入栈
+    while (!QueueEmpty(Q)) {
+        DeQueue(Q, &data);
+        PushToStack2(S, data);
+    }
+    // 栈元素出栈入队
+    while (!Stack2IsEmpty(S)) {
+        PopFromStack2(S, &data);
+        EnQueue(Q, data);
+    }
+}
+
+void testReverseQueue()
+{
+    puts("王道02：Q是一个队列，S是一个空栈，实现将队列中的元素逆置的算法。");
+    Queue queue;
+    InitQueue(&queue);
+    for (int i = 1; i <= 10; ++i)
+        EnQueue(&queue, i);
+    StackImpl2 stack;
+    InitStack2(&stack);
+    
+    printf("初始队列：");
+    QueueTraverse(&queue);
+
+    reverseQueue(&queue, &stack);
+    printf("逆置队列后：");
+    QueueTraverse(&queue);
+
     DestroyQueue(&queue);
+    DestroyStack2(&stack);
 }
