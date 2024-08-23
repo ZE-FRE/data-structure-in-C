@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include "SqList.h"
 #include "ForwardList.h"
 #include "Stack.h"
@@ -7,8 +7,11 @@
 #include "LinkQueue.h"
 #include "Queue.h"
 #include "QueueImpl2.h"
+#include "QueueImpl3.h"
+#include "ReusableLinkQueue.h"
 #include "String.h"
-#include "BstTree.h"
+#include "BiTree.h"
+//#include "BstTree.h"
 
 
 int main(int argc, char* argv[])
@@ -27,11 +30,17 @@ int main(int argc, char* argv[])
 
 	//testQueue();
 
-	testQueueImpl2();
+	//testQueueImpl2();
+
+	//testQueueImpl3();
+
+	//testReusableLinkQueue();
 
 	//testString();
 
-	//testBstTree();
+	//testBiTree();
+
+	testBstTree();
 
 	return 0;
 }
