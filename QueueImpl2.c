@@ -1,4 +1,4 @@
-﻿#include "QueueImpl2.h"
+#include "QueueImpl2.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,7 +47,8 @@ void DestroyQueue2(QueueImpl2* queue)
     queue->front = queue->rear = 0;
 }
 
-void testQueueImpl2()
+// 测试此方法时把队列长度改为1
+void testFullAndEmpty()
 {
     QueueImpl2 queue;
     InitQueue2(&queue);
@@ -55,11 +56,55 @@ void testQueueImpl2()
     EnQueue2(&queue, "hello");
     EnQueue2(&queue, "world");
 
-    char *elem = NULL;
-    DeQueue2(&queue, &elem);
-    printf("%s\n", elem);
+    QTagElemType elem;
+    if (DeQueue2(&queue, &elem))
+        printf("%s\n", elem);
 
     if (!DeQueue2(&queue, &elem))
         printf("队空");
     DestroyQueue2(&queue);
+}
+
+// 测试此方法时把队列长度改大
+#pragma warning(disable:4996)
+void testCharsInQueue()
+{
+    QueueImpl2 queue;
+    QueueImpl2* q_ptr = &queue;
+    InitQueue2(q_ptr);
+
+    char str1[] = "let's study data structure and algorithm using C together";
+    char* space = " ";
+    char* word = strtok(str1, space);
+    while (word) {
+        EnQueue2(q_ptr, word);
+        word = strtok(NULL, space);
+    }
+
+    // 出队4个
+    char* elem = NULL;
+    for (int i = 0; i < 4; ++i) {
+        if (DeQueue2(q_ptr, &elem))
+            printf("%s ", elem);
+    }
+
+    // 再入队
+    char str2[] = "让 我们 一起 学习 数据结构与算法（C语言版） 吧";
+    word = strtok(str2, space);
+    while (word) {
+        EnQueue2(q_ptr, word);
+        word = strtok(NULL, space);
+    }
+
+    // 全部出队
+    while (DeQueue2(q_ptr, &elem))
+        printf("%s ", elem);
+}
+
+
+void testQueueImpl2()
+{
+    //testFullAndEmpty();
+
+    testCharsInQueue();
 }
