@@ -1,4 +1,4 @@
-#ifndef REUSABLE_LINK_QUEUE_H_
+﻿#ifndef REUSABLE_LINK_QUEUE_H_
 #define REUSABLE_LINK_QUEUE_H_
 
 #include <stdbool.h>

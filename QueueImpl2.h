@@ -1,4 +1,4 @@
-#ifndef QUEUE_IMPL2_H_
+﻿#ifndef QUEUE_IMPL2_H_
 #define QUEUE_IMPL2_H_
 
 #include <stdbool.h>

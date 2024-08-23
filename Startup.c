@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include "SqList.h"
 #include "ForwardList.h"
 #include "Stack.h"
@@ -11,7 +11,7 @@
 #include "ReusableLinkQueue.h"
 #include "String.h"
 #include "BiTree.h"
-//#include "BstTree.h"
+#include "BstTree.h"
 
 
 int main(int argc, char* argv[])

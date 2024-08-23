@@ -128,11 +128,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BiTree.h" />
     <ClInclude Include="BstTree.h" />
     <ClInclude Include="ForwardList.h" />
     <ClInclude Include="LinkQueue.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="QueueImpl2.h" />
+    <ClInclude Include="QueueImpl3.h" />
+    <ClInclude Include="ReusableLinkQueue.h" />
     <ClInclude Include="SharedStack.h" />
     <ClInclude Include="SqList.h" />
     <ClInclude Include="Stack.h" />
@@ -140,11 +143,14 @@
     <ClInclude Include="String.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BiTree.c" />
     <ClCompile Include="BstTree.c" />
     <ClCompile Include="ForwardList.c" />
     <ClCompile Include="LinkQueue.c" />
     <ClCompile Include="Queue.c" />
     <ClCompile Include="QueueImpl2.c" />
+    <ClCompile Include="QueueImpl3.c" />
+    <ClCompile Include="ReusableLinkQueue.c" />
     <ClCompile Include="SharedStack.c" />
     <ClCompile Include="SqList.c" />
     <ClCompile Include="Stack.c" />

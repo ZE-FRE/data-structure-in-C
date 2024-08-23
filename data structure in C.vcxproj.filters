@@ -45,6 +45,15 @@
     <ClInclude Include="String.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="BiTree.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="QueueImpl3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ReusableLinkQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BstTree.c">
@@ -78,6 +87,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="String.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BiTree.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="QueueImpl3.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ReusableLinkQueue.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
