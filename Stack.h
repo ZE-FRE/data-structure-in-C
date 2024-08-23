@@ -1,13 +1,15 @@
-﻿#ifndef STACK_H_
+#ifndef STACK_H_
 #define STACK_H_
 
 #include <stdbool.h>
-#include "BstTree.h"
+#include "BiTree.h"
 
 // 动态数组收缩阈值
 #define SHRINK_THRESHOLD 4
 
-typedef BstNode* ElemType;
+#define STACK_INIT_SIZE 8
+
+typedef BiNode* ElemType;
 
 typedef struct 
 {
@@ -19,7 +21,7 @@ typedef struct
 	int top;
 } Stack;
 
-bool InitStack(Stack* stack, int initSize);
+bool InitStack(Stack* stack);
 
 bool IsEmpty(const Stack* stack);
 
@@ -40,13 +42,13 @@ static void shrink(Stack* stack);
 static bool grow(Stack* stack);
 
 
-void testStackInt();
+static void testStackInt();
 /*
  * 需要暂时把SHRINK_THRESHOLD改为4
  */
-void testShrinkAndGrow();
+static void testShrinkAndGrow();
 
-void testBstTreeStack();
+static void testBiTreeStack();
 void testStack();
 
 #endif
