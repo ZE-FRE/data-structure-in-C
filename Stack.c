@@ -1,14 +1,13 @@
-﻿#include "Stack.h"
+#include "Stack.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-bool InitStack(Stack* stack, int initCapacity)
+bool InitStack(Stack* stack)
 {
-	if (initCapacity <= 0) return false;
-	stack->base = (ElemType*)malloc(sizeof(ElemType) * initCapacity);
+	stack->base = (ElemType*)malloc(sizeof(ElemType) * STACK_INIT_SIZE);
 	// 内存分配失败
 	if (!stack) return false;
-	stack->capacity = initCapacity;
+	stack->capacity = STACK_INIT_SIZE;
 	stack->top = -1;
 	return true;
 }
@@ -83,7 +82,7 @@ bool grow(Stack* stack)
 void testStackInt()
 {
 	//Stack stack;
-	//InitStack(&stack, 4);
+	//InitStack(&stack);
 	//Push(&stack, 1);
 	//Push(&stack, 2);
 	//Push(&stack, 3);
@@ -103,7 +102,7 @@ void testStackInt()
 
 	//printf("\n============\n");
 	//Stack stack1;
-	//InitStack(&stack1, 4);
+	//InitStack(&stack1);
 	//Push(&stack1, 1);
 	//Push(&stack1, 2);
 	//Pop(&stack1, &val);
@@ -124,10 +123,9 @@ void testStackInt()
 void testShrinkAndGrow()
 {
 	//Stack stack;
-	//InitStack(&stack, 2);
+	//InitStack(&stack);
 	//Push(&stack, 1);
 	//Push(&stack, 2);
-	//// 发生扩容
 	//Push(&stack, 3);
 	//Push(&stack, 4);
 	//// 发生扩容，超过阈值，此时capacity == 8
@@ -140,21 +138,19 @@ void testShrinkAndGrow()
 	//DestroyStack(&stack);
 }
 
-void testBstTreeStack()
+void testBiTreeStack()
 {
 	Stack stack;
-	InitStack(&stack, 3);
-	Push(&stack, NewNode(1));
-	Push(&stack, NewNode(2));
-	Push(&stack, NewNode(3));
+	InitStack(&stack);
+	Push(&stack, newBiNode(1));
+	Push(&stack, newBiNode(2));
+	Push(&stack, newBiNode(3));
+	Push(&stack, newBiNode(4));
+	Push(&stack, newBiNode(5));
 
-	BstNode *node;
-	Pop(&stack, &node);
-	printf("node value = %d\n", node->value);
-	Pop(&stack, &node);
-	printf("node value = %d\n", node->value);
-	Pop(&stack, &node);
-	printf("node value = %d\n", node->value);
+	BiNode *node;
+	while (Pop(&stack, &node))
+		printf("node elem = %d\n", node->elem);
 
 }
 
@@ -164,5 +160,5 @@ void testStack()
 
 	//testShrinkAndGrow();
 
-	testBstTreeStack();
+	testBiTreeStack();
 }
