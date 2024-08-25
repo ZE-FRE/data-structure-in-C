@@ -8,6 +8,7 @@ bool InitReusableQueue(ReusableLinkQueue* queue)
     if (!newNode) return false;
     newNode->next = newNode;
     queue->front = queue->rear = newNode;
+    return true;
 }
 
 bool ReusableQueueEmpty(ReusableLinkQueue* queue)

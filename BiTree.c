@@ -4,6 +4,14 @@
 #include "Stack.h"
 #include "ReusableLinkQueue.h"
 
+BiTree createDefaultBiTree()
+{
+	BiTree bitree = NULL;
+	BiElemType elems[] = { 34,24,18,6,'#',14,'#','#','#',28,27,'#','#',32,'#','#',39,'#',64,42,'#',48,'#','#',66,'#','#' };
+	InitBiTree(&bitree, elems, sizeof(elems) / sizeof(elems[0]));
+	return bitree;
+}
+
 void InitBiTree(BiTree* bitree, BiElemType elems[], int len)
 {
 	Queue queue;
@@ -120,8 +128,8 @@ void InOrder(BiTree bitree, VisitBiNode visit_func)
 void PostOrder(BiTree bitree, VisitBiNode visit_func)
 {
 	Stack stack;
+	InitStack(&stack);
 	Stack* stack_ptr = &stack;
-	InitStack(stack_ptr);
 	BiNode* node = bitree;
 	while (node || !IsEmpty(stack_ptr)) {
 		if (node) { // 一直往左走
@@ -147,6 +155,7 @@ void PostOrder(BiTree bitree, VisitBiNode visit_func)
 
 void LevelOrder(BiTree bitree, VisitBiNode visit_func)
 {
+	if (bitree == NULL) return;
 	ReusableLinkQueue queue;
 	InitReusableQueue(&queue);
 	EnReusableQueue(&queue, bitree);
@@ -158,6 +167,7 @@ void LevelOrder(BiTree bitree, VisitBiNode visit_func)
 		if (node->right)
 			EnReusableQueue(&queue, node->right);
 	}
+	DestroyReusableQueue(&queue);
 }
 
 void printBiNode(BiNode* node)
@@ -174,11 +184,7 @@ void testBiTreeTraverse()
 	 * 后序：14,6,18,27,32,28,24,48,42,66,64,39,34
 	 * 层序：34,24,39,18,28,64,6,27,32,42,66,14,48
 	 */
-
-	BiTree bitree = NULL;
-	BiElemType elems[] = { 34,24,18,6,'#',14,'#','#','#',28,27,'#','#',32,'#','#',39,'#',64,42,'#',48,'#','#',66,'#','#' };
-	InitBiTree(&bitree, elems, sizeof(elems) / sizeof(elems[0]));
-
+	BiTree bitree = createDefaultBiTree();
 	puts("递归遍历二叉树。");
 
 	printf("先序序列：");
@@ -196,7 +202,7 @@ void testBiTreeTraverse()
 	printf("\n后序序列：");
 	PostOrder(bitree, printBiNode);
 
-	printf("\n\n层序遍历：");
+	printf("\n\n层序序列：");
 	LevelOrder(bitree, printBiNode);
 
 	DestroyBiTree(bitree);
@@ -204,5 +210,87 @@ void testBiTreeTraverse()
 
 void testBiTree()
 {
-	testBiTreeTraverse();
+	//testBiTreeTraverse();
+
+	//testContraryLevelOrder();
+
+	testBiTreeHeight();
+}
+
+void contraryLevelOrder(BiTree bitree)
+{
+	if (bitree == NULL) return;
+	Stack stack;
+	InitStack(&stack);
+	Stack* stack_ptr = &stack;
+	ReusableLinkQueue queue;
+	InitReusableQueue(&queue);
+	EnReusableQueue(&queue, bitree);
+	BiNode* node = NULL;
+	while (DeReusableQueue(&queue, &node)) {
+		// 入栈
+		Push(stack_ptr, node);
+		if (node->left)
+			EnReusableQueue(&queue, node->left);
+		if (node->right)
+			EnReusableQueue(&queue, node->right);
+	}
+
+	// 出栈访问
+	while (Pop(stack_ptr, &node)) 
+		printf("%d ", node->elem);
+
+	DestroyStack(stack_ptr);
+	DestroyReusableQueue(&queue);
+}
+
+void testContraryLevelOrder()
+{
+	puts("王道04：试给出二叉树的自下而上、从右到左的层次遍历算法。");
+	BiTree bitree = createDefaultBiTree();
+	printf("逆层序遍历序列：");
+	contraryLevelOrder(bitree);
+	DestroyBiTree(bitree);
+}
+
+int bitreeHeight(BiTree bitree)
+{
+	Stack stack;
+	InitStack(&stack);
+	Stack *stack_ptr = &stack;
+	BiNode *node = bitree;
+	int max_height = 0;
+	int cur_height = 0;
+	while (node || !IsEmpty(stack_ptr)) {
+		if (node) { // 一直向左走
+			++cur_height;
+			if (cur_height > max_height)
+				max_height = cur_height;
+			Push(stack_ptr, node);
+			node = node->left;
+		}
+		else {
+			Peek(stack_ptr, &node);
+			if (node->right && !node->right->visited) { // 右子树还未访问，表明是从左子树返回的
+				node = node->right;
+			}
+			else {
+				Pop(stack_ptr, &node);
+				--cur_height;
+				node->visited = true;
+				node = NULL;
+			}
+		}
+	}
+	DestroyStack(stack_ptr);
+	return max_height;
+}
+
+void testBiTreeHeight()
+{
+	puts("05：假设二叉树采用二叉链表存储结构，设计一个非递归算法求二叉树的高度。");
+	BiTree bitree = createDefaultBiTree();
+	printf("二叉树高度为：%d", bitreeHeight(bitree));
+	DestroyBiTree(bitree);
+
 }

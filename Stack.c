@@ -1,4 +1,4 @@
-#include "Stack.h"
+﻿#include "Stack.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -40,7 +40,7 @@ bool Pop(Stack* stack, ElemType* elem)
 {
 	if (IsEmpty(stack)) return false;
 	*elem = stack->base[stack->top--];
-	if (stack->capacity > SHRINK_THRESHOLD)
+	if (Size(stack) <= SHRINK_THRESHOLD)
 		shrink(stack);
 	return true;
 }

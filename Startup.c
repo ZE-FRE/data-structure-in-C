@@ -38,9 +38,9 @@ int main(int argc, char* argv[])
 
 	//testString();
 
-	//testBiTree();
+	testBiTree();
 
-	testBstTree();
+	//testBstTree();
 
 	return 0;
 }
