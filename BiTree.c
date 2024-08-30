@@ -1,4 +1,4 @@
-﻿#include "BiTree.h"
+#include "BiTree.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "Stack.h"
@@ -176,6 +176,12 @@ void printBiNode(BiNode* node)
 		printf("%d ", node->elem);
 }
 
+void printBiNodeAsChar(BiNode* node)
+{
+	if (node)
+		printf("%c ", node->elem);
+}
+
 void testBiTreeTraverse()
 {
 	/*
@@ -214,7 +220,34 @@ void testBiTree()
 
 	//testContraryLevelOrder();
 
-	testBiTreeHeight();
+	//testBiTreeHeight();
+
+	//testIsCompleteBitree();
+
+	//testDoubleNodeCount();
+
+	//testSwapLeftRight();
+
+	//testKValueOnPreOrder();
+
+	//testDeleteSubTree();
+
+	//testPrintAncestors();
+
+	//testBitreeWidth();
+
+	testFullBiTreePreToPost();
+
+	//testLinkLeaf();
+
+	//testBitreeSimilarity();
+
+	//testBitreeWPL();
+
+	//testPrintExpression();
+
+	//testSqBiTreeIsBST();
+
 }
 
 void contraryLevelOrder(BiTree bitree)
@@ -293,4 +326,500 @@ void testBiTreeHeight()
 	printf("二叉树高度为：%d", bitreeHeight(bitree));
 	DestroyBiTree(bitree);
 
+}
+
+bool isCompleteBitree(BiTree bitree)
+{
+	ReusableLinkQueue queue;
+	InitReusableQueue(&queue);
+	EnReusableQueue(&queue, bitree);
+	BiNode* node = NULL;
+	while (!ReusableQueueEmpty(&queue)) {
+		DeReusableQueue(&queue, &node);
+		if (node) {
+			EnReusableQueue(&queue, node->left);
+			EnReusableQueue(&queue, node->right);
+		}
+		else { // 遍历到第一个空结点
+			while (!ReusableQueueEmpty(&queue)) {
+				DeReusableQueue(&queue, &node);
+				if (node)
+					return false;
+			}
+		}
+	}
+	return true;
+}
+
+void testIsCompleteBitree()
+{
+	puts("06：判别给定二叉树是否是完全二叉树。");
+	BiTree T1 = createDefaultBiTree();
+	printf("T1是否为完全二叉树？%d", isCompleteBitree(T1));
+
+	/*
+	  *				1
+	  *          /		\
+	  *        2		 3
+	  *      /   \     /   \
+	  *     4     5   6     7
+	  *   /  \   /   
+	  *	 8	  9 10
+	  */
+	BiElemType elems[] = { 1,2,4,8,'#','#',9,'#','#',5,10,'#','#','#',3,6,'#','#',7,'#','#' };
+	BiTree T2 = NULL;
+	InitBiTree(&T2, elems, sizeof(elems) / sizeof(elems[0]));
+	printf("\nT2是否为完全二叉树？%d", isCompleteBitree(T2));
+	DestroyBiTree(T1);
+	DestroyBiTree(T2);
+}
+
+int doubleNodeCount(BiTree bitree)
+{
+	if (bitree == NULL) return 0;
+	int leftCount = doubleNodeCount(bitree->left);
+	int rightCount = doubleNodeCount(bitree->right);
+	if (bitree->left && bitree->right)
+		return leftCount + rightCount + 1;
+	return leftCount + rightCount;
+}
+
+void testDoubleNodeCount()
+{
+	puts("07：假设二叉树采用二叉链表存储结构存储，试设计一个算法，计算一棵给定二叉树的所有双分支结点个数。");
+	BiTree bitree = createDefaultBiTree();
+	printf("二叉树双分支结点个数为：%d", doubleNodeCount(bitree));
+	DestroyBiTree(bitree);
+}
+
+void swapLeftRight(BiTree bitree)
+{
+	if (bitree == NULL) return;
+	BiNode* temp = bitree->left;
+	bitree->left = bitree->right;
+	bitree->right = temp;
+	swapLeftRight(bitree->left);
+	swapLeftRight(bitree->right);
+	
+}
+
+void testSwapLeftRight()
+{
+	puts("08：设B是一棵采用链式结构存储的二叉树，编写一个把树B中所有结点的左、右子树进行交换的函数。");
+	BiTree bitree = createDefaultBiTree();
+
+	swapLeftRight(bitree);
+	printf("交换左右子树后\n");
+	 /*
+	  *				34
+	  *          /		\
+	  *        39		24
+	  *      /        /   \
+	  *    64        28    18
+	  *   /  \      /  \	 \
+	  *	66	 42    32  27	  6
+	  *		/	  			 /
+	  *	   48			    14			  
+	  */
+	// 先序：34 39 64 66 42 48 24 28 32 27 18 6 14
+	// 中序：66 64 48 42 39 34 32 28 27 24 18 14 6
+	printf("先序：");
+	PreOrder(bitree, printBiNode);
+	printf("\n中序：");
+	InOrder(bitree, printBiNode);
+	DestroyBiTree(bitree);
+}
+
+BiElemType kValueOnPreOrderRecur(BiTree bitree)
+{
+	if (bitree == NULL) return 0;
+	// 当前结点是第k个结点
+	if (++k_count == pre_k) return bitree->elem;
+
+	BiElemType leftRet = kValueOnPreOrderRecur(bitree->left);
+	if (leftRet) // 在左子树找到了第k个结点，不再遍历右子树，返回结果
+		return leftRet;
+	return kValueOnPreOrderRecur(bitree->right);
+}
+
+bool kValueOnPreOrder(BiTree bitree, int k, BiElemType* kValue)
+{
+	Stack stack;
+	InitStack(&stack);
+	Stack* stack_ptr = &stack;
+	BiNode* node = bitree;
+	while (node || !IsEmpty(stack_ptr)) {
+		if (node) {
+			if (--k == 0) { // 当前结点是第k个结点
+				*kValue = node->elem;
+				return true;
+			}
+			Push(stack_ptr, node);
+			node = node->left;
+		}
+		else {
+			Pop(stack_ptr, &node);
+			node = node->right;
+		}
+	}
+	DestroyStack(stack_ptr);
+	// 二叉树结点数少于k个
+	return false;
+}
+
+void testKValueOnPreOrder()
+{
+	puts("09：假设二叉树采用二叉链表存储结构存储，设计一个算法，求先序遍历序列中第k(1≤k≤二叉树中结点个数)个结点的值。");
+	BiTree bitree = createDefaultBiTree();
+
+	BiElemType kValue = kValueOnPreOrderRecur(bitree);
+	if (kValue)
+		printf("递归遍历，先序第%d个结点值为：%d\n", pre_k, kValue);
+	bool ret = kValueOnPreOrder(bitree, pre_k, &kValue);
+	if (ret) 
+		printf("非递归遍历，先序第%d个结点值为：%d\n", pre_k, kValue);
+
+	DestroyBiTree(bitree);
+
+}
+
+void deleteSubTree(BiTree* bitree, BiElemType deletedX)
+{
+	if (*bitree == NULL) return;
+	if ((*bitree)->elem == deletedX) {
+		DestroyBiTree(*bitree);
+		*bitree = NULL;
+		return;
+	}
+	deleteSubTree(&(*bitree)->left, deletedX);
+	deleteSubTree(&(*bitree)->right, deletedX);
+}
+
+void testDeleteSubTree()
+{
+	puts("10：已知二叉树以二叉链表存储，编写算法完成：对于树中每个元素值为x的结点，删除以它为根的子树，并释放相应的空间。");
+
+	/*
+	 * 用先序序列[34,24,18,6,#,14,#,#,#,18,27,#,#,32,#,#,39,#,64,18,#,48,#,#,18,#,#]初始化为一棵二叉树
+	 *            34
+	 *          /    \
+	 *        24      39
+	 *      /   \       \
+	 *    18    18      64
+	 *   /     /  \    /  \
+	 *  6     27  32  18  18
+	 *   \              \
+	 *   14             48
+	 */
+	BiTree bitree = NULL;
+	BiElemType elems[] = { 34,24,18,6,'#',14,'#','#','#',18,27,'#','#',32,'#','#',39,'#',64,18,'#',48,'#','#',18,'#','#' };
+	InitBiTree(&bitree, elems, sizeof(elems) / sizeof(elems[0]));
+
+	printf("删除前层序：");
+	LevelOrder(bitree, printBiNode);
+
+	deleteSubTree(&bitree, 18);
+	/*
+	 *            34
+	 *          /    \
+	 *        24      39
+	 *			        \      
+	 *					64
+	 */
+	printf("\n删除后层序：");
+	LevelOrder(bitree, printBiNode);
+
+	DestroyBiTree(bitree);
+}
+
+bool printAncestors(BiTree bitree, BiElemType x)
+{
+	if (bitree == NULL) return false;
+	if (bitree->elem == x) return true;
+	bool leftHasX = printAncestors(bitree->left, x);
+	if (leftHasX) {
+		printf("%d ", bitree->elem);
+		return true;
+	}
+	bool rightHasX = printAncestors(bitree->right, x);
+	if (rightHasX) {
+		printf("%d ", bitree->elem);
+		return true;
+	}
+	return false;
+}
+
+void testPrintAncestors()
+{
+	puts("11：在二叉树中查找值为x的结点，试编写算法（用C语言）打印值为x的结点的所有祖先，假设值为x的结点不多于一个。");
+	BiTree bitree = createDefaultBiTree();
+	printf("%d的祖先为：", 48);
+	printAncestors(bitree, 48);
+	DestroyBiTree(bitree);
+}
+
+bool ANCESTOR(BiTree ROOT, BiNode* p, BiNode* q, BiNode** r)
+{
+	return false;
+}
+
+void testANCESTOR()
+{
+}
+
+int bitreeWidth(BiTree bitree)
+{
+	if (bitree == NULL) return 0;
+	int height = bitreeHeight(bitree);
+	int* count_arr = (int*)calloc(height + 1, sizeof(int));
+	if (!count_arr) return 0;
+	increaseWidth(bitree, 1, count_arr);
+	// 找出最大宽度
+	int width = 0;
+	for (int i = 1; i < height + 1; ++i) {
+		if (count_arr[i] > width)
+			width = count_arr[i];
+	}
+	return width;
+}
+
+void increaseWidth(BiNode* node, int level, int count_arr[])
+{
+	if (node == NULL) return;
+	++count_arr[level];
+	increaseWidth(node->left, level + 1, count_arr);
+	increaseWidth(node->right, level + 1, count_arr);
+}
+
+void testBitreeWidth()
+{
+	puts("13：假设二叉树采用二叉链表存储结构，设计一个算法，求非空二叉树b的宽度（即具有结点数最多的那一层的结点个数）。");
+	BiTree bitree = createDefaultBiTree();
+	printf("二叉树的宽度为：%d", bitreeWidth(bitree));
+	DestroyBiTree(bitree);
+}
+
+void fullBiTreePreToPost(int pre[], int pre_begin, int pre_end, int post[], int post_end)
+{
+	// 先序序列已遍历完毕
+	if (pre_begin > pre_end) return;
+
+	post[post_end] = pre[pre_begin];
+	// 左或者右子树结点数
+	int subCount = (pre_end - pre_begin) / 2;
+	fullBiTreePreToPost(pre, pre_begin + 1, pre_begin + subCount, post, post_end - subCount - 1);
+	fullBiTreePreToPost(pre, pre_end - subCount + 1, pre_end, post, post_end - 1);
+}
+
+void testFullBiTreePreToPost()
+{
+	puts("14：设有一棵满二叉树（所有结点值均不同），已知其先序序列为pre，设计一个算法求其后序序列post。");
+	/*
+	 *            34
+	 *          /    \
+	 *        24      39
+	 *      /   \    /  \
+	 *     18   28  37  64
+	 */
+	int pre[] = { 34,24,18,28,39,37,64 };
+	int post[7];
+	fullBiTreePreToPost(pre, 0, 6, post, 6);
+	// 后序序列：18 28 24 37 64 39 34
+	printf("后序序列为：");
+	for (int i = 0; i < 7; ++i)
+		printf("%d ", post[i]);
+}
+
+void linkLeaf(BiTree bitree, BiNode** preLeaf)
+{
+	if (bitree == NULL) return;
+	if (!bitree->left && !bitree->right) {
+		(*preLeaf)->right = bitree;
+		*preLeaf = bitree;
+		return;
+	}
+	linkLeaf(bitree->left, preLeaf);
+	linkLeaf(bitree->right, preLeaf);
+}
+
+void testLinkLeaf()
+{
+	puts("15：将二叉树的叶结点按从左到右的顺序链成一个单链表。");
+	BiTree bitree = createDefaultBiTree();
+	
+	BiNode* head = newBiNode(0);
+	BiNode* temp_head = head;
+	linkLeaf(bitree, &temp_head);
+
+	// 输出叶子结点
+	printf("叶子结点为：");
+	BiNode* p = head->right, *q;
+	while (p) {
+		printf("%d ", p->elem);
+		q = p;
+		p = p->right;
+		// 恢复二叉树，方便回收内存空间
+		q->right = NULL;
+	}
+
+	DestroyBiTree(bitree);
+}
+
+bool bitreeSimilarity(BiTree T1, BiTree T2)
+{
+	if (T1 ==NULL && T2 == NULL)
+		return true;
+	else if (T1 && !T2)
+		return false;
+	else if (!T1 && T2)
+		return false;
+
+	bool leftSimilarity = bitreeSimilarity(T1->left, T2->left);
+	if (!leftSimilarity) return false;
+	return bitreeSimilarity(T1->right, T2->right);
+}
+
+void testBitreeSimilarity()
+{
+	puts("16：判断两棵二叉树是否相似。");
+	BiTree T1 = createDefaultBiTree();
+	//BiTree T2 = createDefaultBiTree();
+
+	/*
+	 *            34
+	 *          /    \
+	 *        24      39
+	 *      /   \       \
+	 *    18    18      64
+	 *   /     /  \    /  
+	 *  6     27  32  18  
+	 *   \              \
+	 *   14             48
+	 */
+	BiTree T2 = NULL;
+	BiElemType elems[] = { 34,24,18,6,'#',14,'#','#','#',18,27,'#','#',32,'#','#',39,'#',64,18,'#',48,'#','#', '#'};
+	InitBiTree(&T2, elems, sizeof(elems) / sizeof(elems[0]));
+
+	printf("两棵树是否相似？%d", bitreeSimilarity(T1, T2));
+
+	DestroyBiTree(T1);
+	DestroyBiTree(T2);
+}
+
+int bitreeWPL(BiTree root, int level)
+{
+	if (root == NULL) return 0;
+	if (!root->left && !root->right) {
+		// 用elem表示权值weight
+		return level * root->elem;
+	}
+	// 左子树的WPL
+	int leftWPL = bitreeWPL(root->left, level + 1);
+	int rightWPL = bitreeWPL(root->right, level + 1);
+	return leftWPL + rightWPL;
+}
+
+void testBitreeWPL()
+{
+	puts("17：求二叉树T的带权路径长度WPL。");
+	BiTree T = createDefaultBiTree();
+
+	printf("T的WPL为：%d", bitreeWPL(T, 0));
+
+	DestroyBiTree(T);
+}
+
+void printExpression(BiTree bitree)
+{
+	if (bitree == NULL) return;
+	if (bitree->left || bitree->right) {// 不是叶子结点
+		printf("(");
+		// 打印左子树
+		printExpression(bitree->left);
+		printf("%c", bitree->elem);
+		// 打印右子树
+		printExpression(bitree->right);
+		printf(")");
+	} else // 叶子结点
+		printf("%c", bitree->elem);
+}
+
+void testPrintExpression()
+{
+	puts("18：将给定的表达式树（二叉树）转换为等价的中缀表达式（通过括号反映操作符的计算次序）并输出。");
+	/*
+	 *			 *							+
+	 *		/         \					/  		\
+	 *	   +		   *			   *		 -
+	 *	 /   \		 /   \			 /	 \		  \
+	 *  a	  b	    c	  -		    a	  b		   -
+	 *						\					 /	 \
+	 *						 d					c	  d
+	 */
+	BiTree T1 = NULL;
+	BiElemType elems1[] = { '*','+','a','#','#','b','#','#','*','c','#','#','-','#','d','#','#' };
+	InitBiTree(&T1, elems1, sizeof(elems1) / sizeof(elems1[0]));
+
+	BiTree T2 = NULL;
+	BiElemType elems2[] = { '+','*','a','#','#','b','#','#','-','#','-','c','#','#','d','#','#' };
+	InitBiTree(&T2, elems2, sizeof(elems2) / sizeof(elems2[0]));
+
+	printf("表达式1：");
+	printExpression(T1);
+	printf("\n表达式2：");
+	printExpression(T2);
+
+	DestroyBiTree(T1);
+	DestroyBiTree(T2);
+}
+
+bool SqBiTreeIsBST(SqBiTree *bitree)
+{
+	int *arr = bitree->SqBiTNode;
+	// 分支结点个数
+	int branchCount = bitree->ElemNum / 2;
+	for (int i = 0; i < branchCount; ++i) {
+		if (arr[i] == -1)
+			continue;
+		int left = arr[(i + 1) * 2 - 1];
+		if (left != -1 && left > arr[i])
+			return false;
+		int right = arr[(i + 1) * 2];
+		if (right != -1 && arr[i] > right)
+			return false;
+	}
+	return true;
+}
+
+void InitSqBiTree(SqBiTree* bitree, int elems[], int len)
+{
+	for (int i = 0; i < len; ++i)
+		bitree->SqBiTNode[i] = elems[i];
+	bitree->ElemNum = len;
+}
+
+void testSqBiTreeIsBST()
+{
+	puts("王道19：判断采用顺序存储结构的二叉树是否是二叉排序树。");
+	SqBiTree T1;
+	int elems1[] = { 40 ,25 ,60 ,-1 ,30 ,-1 ,80 ,-1 ,-1 ,27 };
+	InitSqBiTree(&T1, elems1, sizeof(elems1) / sizeof(int));
+	SqBiTree T2;
+	int elems2[] = { 40, 50, 60 ,-1 ,30 ,-1 ,-1 ,-1 ,-1 ,-1 ,35 };
+	InitSqBiTree(&T2, elems2, sizeof(elems2) / sizeof(int));
+
+	SqBiTree T3;
+	/*
+	 *            34
+	 *          /    \
+	 *        24      39
+	 *      /   \       \
+	 *    18    28      64
+	 */
+	int elems3[] = { 34,24,39,18,28,-1,64 };
+	InitSqBiTree(&T3, elems3, sizeof(elems3) / sizeof(int));
+
+	printf("T1是否是二叉排序树？%d", SqBiTreeIsBST(&T1));
+	printf("\nT2是否是二叉排序树？%d", SqBiTreeIsBST(&T2));
+	printf("\nT3是否是二叉排序树？%d", SqBiTreeIsBST(&T3));
 }
