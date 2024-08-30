@@ -1,4 +1,4 @@
-﻿#include "Queue.h"
+#include "Queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -44,14 +44,14 @@ bool queue_grow(Queue* queue)
 {
     int newArrLen = queue->array_length + QUEUE_INCREASE_LENGTH;
     if (queue->rear > queue->front) {
-        printf("grow1\n");
+        //printf("grow1\n");
         QueueElemType* newBase = (QueueElemType*)realloc(queue->base, sizeof(QueueElemType) * newArrLen);
         if (!newBase) return false;
         queue->base = newBase;
         queue->array_length = newArrLen;
     }
     else {
-        printf("grow2\n");
+        //printf("grow2\n");
         QueueElemType* newBase = (QueueElemType*)malloc(sizeof(QueueElemType) * newArrLen);
         if (!newBase) return false;
         int queue_length = QueueLength(queue);
