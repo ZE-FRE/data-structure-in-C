@@ -276,5 +276,17 @@ void testSqBiTreeIsBST();
 
 /*==========王道书第5章二叉树算法题=========*/
 
+
+/*
+ * 【2007真题2】设二叉树采用二叉链表存储，结点结构为lchild、data和rchild，试编写输出二叉树中从根结点到每个叶结点的路径的算法。
+ * 设二叉树最长路径结点个数小于m，可以使用队列S[1:m]，初始时S.rear=S.front=1。
+ */
+
+/*
+ * 【2012真题】如果以二叉链表作为存储结构，试用类C语言编写统计二叉树非叶子结点个数的层次遍历算法。
+ */
+int branchCount(BiTree bitree);
+void testBranchCount();
+
 #endif
 
