@@ -1,4 +1,4 @@
-﻿#ifndef FORWARD_LIST_H_
+#ifndef FORWARD_LIST_H_
 #define FORWARD_LIST_H_
 
 #include <stdbool.h>
@@ -277,6 +277,35 @@ void testRearrangeList();
 
 
 /*==========王道书第2章链表算法题=========*/
+
+
+
+/*
+ * 【2004真题1】试编写算法，将一个带头结点的单循环链表A，按结点值分解为奇数和偶数两个具有相同结构的链表A和C，
+ * 其中C的结点是原A中结点值为偶数的结点。要求利用原链表的结点。可用ODD(p)逻辑函数判断指针p的值data是否为奇数，是则返回true。
+ * date:2024/9/5
+ */
+void splitOddEven(CyclicNode *A, CyclicNode *C);
+
+/*
+ * 【2007真题1】设p,q分别指向两个不带头结点的单循环链表中的某个结点，试编写一个算法，
+ * 用O(1)时间将这两个单链表合并为一个，并令p指向p和q两者data域值较小的结点。
+ */
+
+/*
+ * 【2010真题1】设p为指向循环单链表L中某一结点的指针，循环单链表L既无头结点也无头指针，长度大于1，结点指针域为next，
+ * 试编写算法，完成删除p所指结点的前趋结点。
+ * date:2024/9/6
+ */
+void deleteCyclicNodePrev(CyclicNode* p);
+
+/*
+ * 【2011真题3】编写一算法将顺序表转存为带头结点的单循环链表。算法中所用到的数据结构需自行定义。
+ * date:2024/9/6
+ */
+#include "SqList.h"
+CyclicNode* sqListToCyclicList(const SqList* sqlist);
+CyclicNode* newCyclicNode(int data);
 
 #endif
 
