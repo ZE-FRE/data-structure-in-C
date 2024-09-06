@@ -1,4 +1,4 @@
-﻿#include "ForwardList.h"
+#include "ForwardList.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -1023,6 +1023,60 @@ void testRearrangeList()
     printf("\n重排后的链表：");
     printList(list);
     DestroyList(&list);
+}
+
+void splitOddEven(CyclicNode *A, CyclicNode *C)
+{
+    CyclicNode *odd_prev = A, *odd = A->next;
+    CyclicNode* even = C;
+    while (odd != A) {
+        if (odd->data / 2 == 0) {
+            odd_prev->next = odd->next;
+            odd->next = NULL;
+            even->next = odd;
+            even = even->next;
+            odd = odd_prev->next;
+        }
+    }
+}
+
+void deleteCyclicNodePrev(CyclicNode* p)
+{
+    // p前趋的前趋
+    CyclicNode* prev = NULL;
+    // p的前趋
+    CyclicNode* node = p;
+    while (node->next != p) {
+        prev = node;
+        node = node->next;
+    }
+    prev->next = p;
+    free(node);
+}
+
+CyclicNode* sqListToCyclicList(const SqList *sqlist)
+{
+    CyclicNode* head = newCyclicNode(0);
+    head->next = head;
+    CyclicNode* rear = head;
+    int data;
+    for (int i = 1; i <= SqListLength(sqlist); ++i) {
+        GetSqElem(sqlist, i, &data);
+        CyclicNode *newNode = newCyclicNode(data);
+        newNode->next = head;
+        rear->next = newNode;
+        rear = newNode;
+    }
+    return head;
+}
+
+CyclicNode* newCyclicNode(int data)
+{
+    CyclicNode* newNode = (CyclicNode*)malloc(sizeof(CyclicNode));
+    if (!newNode) return NULL;
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
 }
 
 
