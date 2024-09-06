@@ -1,4 +1,4 @@
-﻿#include "SqList.h"
+#include "SqList.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -210,7 +210,9 @@ void testSqList()
 
 	//testFindMinPositiveInt();
 
-	testMinDistanceOfTriTuple();
+	//testMinDistanceOfTriTuple();
+
+	testNegativeBeforePositive();
 }
 
 
@@ -643,5 +645,32 @@ void testMinDistanceOfTriTuple()
 }
 
 
-
 /*==========王道书第2章顺序表算法题=========*/
+
+void negativeBeforePositive(int arr[], int len)
+{
+	int* begin = arr;
+	int* end = arr + len - 1;
+	while (begin < end) {
+		if (*begin > 0) {
+			while (begin < end && *end >= 0)
+				--end;
+			int temp = *begin;
+			*begin = *end;
+			*end = temp;
+		}
+		++begin;
+	}
+}
+
+void testNegativeBeforePositive()
+{
+	puts("编写程序将一整数序列中所有负数移到所有正数之前，要求时间复杂度为O(n)。");
+	int arr[] = { 1,-1,2,-2,3,-3,4,-4,5,6,-5,7 };
+	int len = sizeof(arr) / sizeof(int);
+	negativeBeforePositive(arr, len);
+	printf("交换后序列为：");
+	for (int i = 0; i < len; ++i)
+		printf("%d ", arr[i]);
+}
+
