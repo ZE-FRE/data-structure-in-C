@@ -1,4 +1,4 @@
-﻿#ifndef SQLIST_H_
+#ifndef SQLIST_H_
 #define SQLIST_H_
 
 #include <stdbool.h>
@@ -242,5 +242,14 @@ void testMinDistanceOfTriTuple();
 
 /*==========王道书第2章顺序表算法题=========*/
 
+
+/*
+ * 【2005真题1】编写程序将一整数序列中所有负数移到所有正数之前，要求时间复杂度为O(n)。
+ * date:2024/9/6
+ * 思路：用指针begin从前往后遍历序列，end从后往前遍历序列，当begin位置的值为负数时，向后移动，为正数时，切换到end，
+ * end向前遍历，遇到负数时，交换begin与end的位置的值，又切换到begin继续遍历。当begin >= end时，算法结束。
+ */
+void negativeBeforePositive(int arr[], int len);
+void testNegativeBeforePositive();
 
 #endif
