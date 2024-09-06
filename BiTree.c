@@ -236,7 +236,7 @@ void testBiTree()
 
 	//testBitreeWidth();
 
-	testFullBiTreePreToPost();
+	//testFullBiTreePreToPost();
 
 	//testLinkLeaf();
 
@@ -247,6 +247,8 @@ void testBiTree()
 	//testPrintExpression();
 
 	//testSqBiTreeIsBST();
+
+	testBranchCount();
 
 }
 
@@ -294,6 +296,8 @@ int bitreeHeight(BiTree bitree)
 	BiNode *node = bitree;
 	int max_height = 0;
 	int cur_height = 0;
+	// 前一个访问结点
+	BiNode* prev_visit = NULL;
 	while (node || !IsEmpty(stack_ptr)) {
 		if (node) { // 一直向左走
 			++cur_height;
@@ -304,13 +308,13 @@ int bitreeHeight(BiTree bitree)
 		}
 		else {
 			Peek(stack_ptr, &node);
-			if (node->right && !node->right->visited) { // 右子树还未访问，表明是从左子树返回的
+			if (node->right && node->right != prev_visit) { // 右子树还未访问，表明是从左子树返回的
 				node = node->right;
 			}
 			else {
 				Pop(stack_ptr, &node);
 				--cur_height;
-				node->visited = true;
+				prev_visit = node;
 				node = NULL;
 			}
 		}
@@ -822,4 +826,36 @@ void testSqBiTreeIsBST()
 	printf("T1是否是二叉排序树？%d", SqBiTreeIsBST(&T1));
 	printf("\nT2是否是二叉排序树？%d", SqBiTreeIsBST(&T2));
 	printf("\nT3是否是二叉排序树？%d", SqBiTreeIsBST(&T3));
+}
+
+int branchCount(BiTree bitree)
+{
+	if (bitree == NULL) return 0;
+	int count = 0;
+	ReusableLinkQueue queue;
+	InitReusableQueue(&queue);
+	BiNode* node = bitree;
+	EnReusableQueue(&queue, node);
+	while (!ReusableQueueEmpty(&queue)) {
+		DeReusableQueue(&queue, &node);
+		if (node->left || node->right)
+			++count;
+		if (node->left)
+			EnReusableQueue(&queue, node->left);
+		if (node->right)
+			EnReusableQueue(&queue, node->right);
+	}
+
+	DestroyReusableQueue(&queue);
+	return count;
+}
+
+void testBranchCount()
+{
+	puts("如果以二叉链表作为存储结构，试用类C语言编写统计二叉树非叶子结点个数的层次遍历算法。");
+	BiTree bitree = createDefaultBiTree();
+
+	printf("非叶子结点个数为：%d", branchCount(bitree));
+
+	DestroyBiTree(bitree);
 }
