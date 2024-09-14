@@ -243,6 +243,7 @@ void testMinDistanceOfTriTuple();
 /*==========王道书第2章顺序表算法题=========*/
 
 
+
 /*
  * 【2005真题1】编写程序将一整数序列中所有负数移到所有正数之前，要求时间复杂度为O(n)。
  * date:2024/9/6
@@ -251,5 +252,26 @@ void testMinDistanceOfTriTuple();
  */
 void negativeBeforePositive(int arr[], int len);
 void testNegativeBeforePositive();
+
+/*
+ * 【2016真题1】设规模n=3m，m≥1的顺序表存储在一维数组int array[n]中，
+ * 它含有的元素为(a1,a2,...,am,b1,b2,...,bm,c1,c2,...,cm)。
+ * 请编写算法将上述顺序表改造成为(c1,c2,...,cm,bm,...,b2,b1,a1,a2,...,am)，要求时间复杂度和空间复杂度尽可能低。
+ * date:2024/9/14
+ */
+void transformSqlist(int arr[], int n);
+void testTransformSqlist();
+
+/*
+ * 【2017真题1】给定一个顺序表L1，设计一个算法以统计其中的相同元素的个数。要求时间复杂度和空间复杂度尽量低。
+ * date:2024/9/14
+ * 思路：可以使用哈希表，遍历顺序表时，若元素在哈希表中不存在，则将该元素作为key放入哈希表，value为1；若该元素存在，则value+1。
+ * 顺序表遍历完后，遍历一次哈希表，统计value > 1的个数。
+ * 时间、空间复杂都都为O(n)
+ */
+
+/*
+ * 【2018简答题2】请简述求自然数a，b的最大公约数、最小公倍数算法思想。
+ */
 
 #endif
