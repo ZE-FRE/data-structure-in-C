@@ -280,6 +280,8 @@ void testSqBiTreeIsBST();
 /*
  * 【2007真题2】设二叉树采用二叉链表存储，结点结构为lchild、data和rchild，试编写输出二叉树中从根结点到每个叶结点的路径的算法。
  * 设二叉树最长路径结点个数小于m，可以使用队列S[1:m]，初始时S.rear=S.front=1。
+ * date:2024/9/13
+ * 思路：先序非递归遍历二叉树，当遍历到叶子结点时，栈中结点就是此叶子结点的所有祖先，打印栈中结点与当前叶子结点，就是从根结点到每个叶结点的路径。
  */
 
 /*
@@ -287,6 +289,48 @@ void testSqBiTreeIsBST();
  */
 int branchCount(BiTree bitree);
 void testBranchCount();
+
+/*
+ * 【2015真题2】采用二叉链表的存储结构，用非递归算法（pop(s,t)，push(s,t)）交换二叉树的左右子树。
+ * date:2024/9/14
+ */
+void exchangeLeftRight(BiNode* node);
+void testExchangeLeftRight();
+
+/*
+ * 【2016真题2】二叉树用二叉链表结构进行存储。请编写算法求二叉树根结点左右子树相隔最远的叶子结点之间距离。
+ * date:2024/9/14
+ * 思路：等价于求根结点左右子树各自的高度，最远距离即为左右子树高度之和。
+ */
+int leafLongestDistance(BiTree bitree);
+void testLeafLongestDistance();
+
+/*
+ * 【2017真题2】二叉树用二叉链表结构进行存储，设计一个算法交换二叉树的左右子树。
+ * date:2024/9/14
+ * 递归和非递归的，上面都实现了。
+ */
+
+/*
+ * 【2018真题2】对于两棵给定的二叉树A和B，判断B是不是A的子结构（约定空树不是任意一个树的子结构）。
+ * B是A的子结构，即A中出现和B相同的结构和结点值。
+ * 
+ * 思路：先序遍历二叉树A，先找到与B根结点值相同的结点，然后比较两棵树是否相同，若相同，则返回true，否则继续遍历A，
+ * 若A遍历完毕，则返回false。
+ */
+bool bitreeIsEqual(BiTree T1, BiTree T2);
+bool isSubTree(BiTree A, BiTree B);
+void testIsSubTree();
+
+
+/*
+ * leetcode:114. 二叉树展开为链表
+ * 展开后的单链表应该同样使用二叉树结点，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+ * date:2024/9/14
+ * 思路：展开，就是在遍历过程中把左子树最后一个结点作为右子树的根结点，右子树指针域指向左子树指针域
+ */
+BiNode* bitreeExpandToList(BiNode* root);
+void testBitreeExpandToList();
 
 #endif
 
