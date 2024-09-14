@@ -248,7 +248,15 @@ void testBiTree()
 
 	//testSqBiTreeIsBST();
 
-	testBranchCount();
+	//testBranchCount();
+
+	//testExchangeLeftRight();
+
+	//testLeafLongestDistance();
+
+	//testIsSubTree();
+
+	testBitreeExpandToList();
 
 }
 
@@ -678,8 +686,7 @@ bool bitreeSimilarity(BiTree T1, BiTree T2)
 	else if (!T1 && T2)
 		return false;
 
-	bool leftSimilarity = bitreeSimilarity(T1->left, T2->left);
-	if (!leftSimilarity) return false;
+	if (!bitreeSimilarity(T1->left, T2->left)) return false;
 	return bitreeSimilarity(T1->right, T2->right);
 }
 
@@ -857,5 +864,132 @@ void testBranchCount()
 
 	printf("非叶子结点个数为：%d", branchCount(bitree));
 
+	DestroyBiTree(bitree);
+}
+
+void exchangeLeftRight(BiNode *node)
+{
+	BiNode* temp = node->left;
+	node->left = node->right;
+	node->right = temp;
+}
+void testExchangeLeftRight()
+{
+	puts("用非递归算法交换二叉树的左右子树");
+	BiTree bitree = createDefaultBiTree();
+
+	PostOrder(bitree, exchangeLeftRight);
+
+	// 先序：34 39 64 66 42 48 24 28 32 27 18 6 14
+	// 中序：66 64 48 42 39 34 32 28 27 24 18 14 6
+	printf("先序：");
+	PreOrder(bitree, printBiNode);
+	printf("\n中序：");
+	InOrder(bitree, printBiNode);
+
+	DestroyBiTree(bitree);
+}
+
+int leafLongestDistance(BiTree bitree)
+{
+	return bitreeHeight(bitree->left) + bitreeHeight(bitree->right);
+}
+
+void testLeafLongestDistance()
+{
+	puts("二叉树用二叉链表结构进行存储。请编写算法求二叉树根结点左右子树相隔最远的叶子结点之间距离。");
+	BiTree bitree = createDefaultBiTree();
+
+	printf("叶子结点之间最远距离为：%d", leafLongestDistance(bitree));
+
+	DestroyBiTree(bitree);
+}
+
+bool bitreeIsEqual(BiTree T1, BiTree T2)
+{
+	if (T1 == T2) // 同一棵二叉树，或都是空树，则返回true
+		return true;
+	else if (T1 == NULL || T2 == NULL) // 有一棵为空树，另一棵不是空树，返回false
+		return false;
+	
+	if (T1->elem != T2->elem)
+		return false;
+	if (!bitreeIsEqual(T1->left, T2->left))
+		return false;
+	if (!bitreeIsEqual(T1->right, T2->right))
+		return false;
+	return true;
+}
+
+bool isSubTree(BiTree A, BiTree B)
+{
+	if (A == NULL || B == NULL) return false;
+	if (A->elem == B->elem && bitreeIsEqual(A, B))
+		return true;
+	if (isSubTree(A->left, B))
+		return true;
+	return isSubTree(A->right, B);
+}
+
+void testIsSubTree()
+{
+	puts("对于两棵给定的二叉树A和B，判断B是不是A的子结构");
+	BiTree A = createDefaultBiTree();
+
+	/*
+	 *		28
+	 *	  /	   \
+	 *   27	   32
+	 */
+	BiTree B = NULL;
+	BiElemType elems[] = { 28,27,'#','#',32,'#','#' };
+	InitBiTree(&B, elems, sizeof(elems) / sizeof(elems[0]));
+	printf("B是否是A的子结构？%d\n", isSubTree(A, B));
+
+
+	BiTree C = newBiNode(48);
+	printf("C是否是A的子结构？%d\n", isSubTree(A, C));
+
+	/*
+	 *		42
+	 *	   /
+	 *	 48
+	 */
+	BiTree D = newBiNode(42);
+	D->left = C;
+	printf("D是否是A的子结构？%d\n", isSubTree(A, D));
+
+	DestroyBiTree(A);
+	DestroyBiTree(B);
+	DestroyBiTree(D);
+}
+
+BiNode* bitreeExpandToList(BiNode* root)
+{
+	if (root == NULL || root->left == NULL && root->right == NULL) // 空结点或叶子结点，直接返回
+		return root;
+	BiNode *left_last = bitreeExpandToList(root->left);
+	BiNode *right_last = bitreeExpandToList(root->right);
+
+	if (left_last) {
+		left_last->right = root->right;
+		root->right = root->left;
+		root->left = NULL;
+	}
+	return right_last ? right_last : left_last;
+}
+
+void testBitreeExpandToList()
+{
+	puts("leetcode:114. 二叉树展开为链表");
+	BiTree bitree = createDefaultBiTree();
+
+	bitreeExpandToList(bitree);
+	printf("展开后：");
+	BiNode* p = bitree;
+	while (p) {
+		printBiNode(p);
+		p = p->right;
+	}
 	DestroyBiTree(bitree);
 }
