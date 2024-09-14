@@ -212,7 +212,9 @@ void testSqList()
 
 	//testMinDistanceOfTriTuple();
 
-	testNegativeBeforePositive();
+	//testNegativeBeforePositive();
+
+	testTransformSqlist();
 }
 
 
@@ -671,6 +673,33 @@ void testNegativeBeforePositive()
 	negativeBeforePositive(arr, len);
 	printf("交换后序列为：");
 	for (int i = 0; i < len; ++i)
+		printf("%d ", arr[i]);
+}
+
+void transformSqlist(int arr[], int n)
+{
+	int m = n / 3;
+	int temp;
+	for (int i = 0; i < m; ++i) {
+		temp = arr[i];
+		arr[i] = arr[2 * m + i];
+		arr[2 * m + i] = temp;
+	}
+	for (int i = m, j = 2 * m - 1; i < j; ++i, --j) {
+		temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = arr[i];
+	}
+}
+void testTransformSqlist()
+{
+	puts("改造顺序表");
+	int arr[] = { 1,2,3,4,11,22,33,44,111,222,333,444 };
+	int n = sizeof(arr) / sizeof(int);
+	transformSqlist(arr, n);
+
+	printf("改造后的顺序表：");
+	for (int i = 0; i < n; ++i)
 		printf("%d ", arr[i]);
 }
 
