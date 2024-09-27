@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "BstTree.h"
 
@@ -52,6 +52,44 @@ void BstInsert(BstTree* treePtr, BstElemType elem)
 		parent->left = node;
 	else
 		parent->right = node;
+}
+
+void BstDeleteRecur(BstTree* bstTree, BstElemType elem)
+{
+	BstNode* currNode = *bstTree;
+	if (currNode == NULL) return;
+	if (elem == currNode->elem)
+		doBstDelete(bstTree);
+	else if (elem < currNode->elem)
+		BstDeleteRecur(&currNode->left, elem);
+	else
+		BstDeleteRecur(&currNode->right, elem);
+}
+
+void doBstDelete(BstNode** deletedNode)
+{
+	BstNode* node = *deletedNode;
+	if (node->left == NULL) { // 左子树不存在，则用右子树替代
+		*deletedNode = node->right;
+		free(node);
+	}
+	else if (node->right == NULL) {// 右子树不存在，则用左子树替代
+		*deletedNode = node->left;
+		free(node);
+	}
+	else { // 左右子树都存在，用后继替代
+		BstNode* successor_parent = node;
+		BstNode* successor = node->right;
+		while (successor->left) {
+			successor_parent = successor;
+			successor = successor->left;
+		}
+		node->elem = successor->elem;
+		if (successor_parent != node) {
+			successor_parent->left = successor->right;
+		}
+		free(successor);
+	}
 }
 
 void BstDelete(BstTree* bstTree, BstElemType elem)
