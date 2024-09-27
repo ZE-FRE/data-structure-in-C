@@ -80,7 +80,7 @@ void SqListTraverse(const SqList* list, VisitSqElem visit);
 void UnionSqList(SqList* La, const SqList *Lb);
 
 
-bool sqElemEqauls(const SqElemType elem1, const SqElemType elem2);
+bool sqElemEquals(const SqElemType elem1, const SqElemType elem2);
 
 void printSqElem(const SqElemType elem);
 
@@ -240,9 +240,11 @@ void minDistanceOfTriTuple(int S1[], int len1, int S2[], int len2, int S3[], int
 void testMinDistanceOfTriTuple();
 
 
-/*==========王道书第2章顺序表算法题=========*/
+/*==========王道书第2章顺序表算法题end=========*/
 
 
+
+/*==========电子科大算法题真题=========*/
 
 /*
  * 【2005真题1】编写程序将一整数序列中所有负数移到所有正数之前，要求时间复杂度为O(n)。
@@ -273,5 +275,85 @@ void testTransformSqlist();
 /*
  * 【2018简答题2】请简述求自然数a，b的最大公约数、最小公倍数算法思想。
  */
+
+/*
+ * 【2021真题1】给定n个元素的数组，求出给出其中任意元素与其后任意元素差值的最大值，即max(array[i]-array[j])（0≤i<j<n），
+ * 时间复杂度和空间复杂度尽可能低。参考函数原型：int GetMax(int *array)
+ */
+
+ /*==========电子科大算法题真题end=========*/
+
+
+
+/*==========电子科大7-5算法题=========*/
+
+/*
+ * 1、给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+ * 请必须使用时间复杂度为O(logn)的算法。
+ */
+
+/*
+ * 2、给定一个包含[0,n]中n个数的数组nums，找出[0,n]这个范围内没有出现在数组中的那个数。
+ * date:2024/9/24
+ * 思路：[0,n]有n+1个数，找出没有出现的那个数，可以用一个长度为n+1的数组arr，数组下标表示数组nums对应的数，0为未出现，1为出现。
+ * 遍历数组nums，将数组arr[i]修改为1。最后再遍历一次arr，第一个arr[i]为0的下标i，即为没有出现在数组中的那个数。
+ */
+int findAbsent(int nums[], int n);
+void testFindAbsent();
+
+/*
+ * 3、给定两个数组nums1和nums2，返回它们的交集。输出结果中的每个元素一定是唯一的。我们可以不考虑输出结果的顺序。
+ * date:2024/9/24
+ * 思路：先排序
+ */
+void bubbleSortArr(int arr[], int n);
+SqList* printArrIntersection(int nums1[], int len1, int nums2[], int len2);
+void testPrintArrIntersection();
+
+/*
+ * 4、给你一个整数数组arr，请你检查是否存在两个整数N和M，满足N是M的两倍（即，N=2*M）。
+ */
+
+/*
+ * 5、给你两个整数数组arr1，arr2和一个整数d，请你返回两个数组之间的距离值。
+ * 距离值定义为符合此距离要求的元素数目：对于元素arr1[i]，不存在任何元素arr2[j]满足|arr[i]-arr2[j]|≤d。
+ */
+
+/*
+ * 6、给你一个严格升序排列的正整数数组arr和一个整数k。请你找到这个数组里第k个缺失的正整数。
+ * date:2024/9/26
+ */
+static int lostKInt(unsigned int arr[], int len, int k);
+void testLostKInt();
+
+/*
+ * 13、给定一个已按照升序排列的整数数组numbers，请你从数组中找出两个数满足相加之和等于目标数target。
+ * 函数应该以长度为2的整数数组的形式返回这两个数的下标值。numbers的下标从0开始计数。
+ * 假设数组中存在且只存在一对符合条件的数字，同时一个数字不能使用两次。(即numbers严格单增)
+ * 
+ */
+typedef int biarray[2];
+typedef biarray *biarray_ptr;
+biarray_ptr findIndicesTarget(int numbers[], int len, int target);
+void testFindIndicesTarget();
+
+
+/*
+14、符合下列属性的数组arr称为山峰数组（山脉数组）：
+arr.length ≥ 3
+存在i（0 < i < arr.length-1）使得：
+arr[0] < arr[1] < ... < arr[i-1] < arr[i]
+arr[i] > arr[i+1] > ... > arr[arr.length-1]
+给定由整数组成的山峰数组arr，返回任何满足arr[0] < arr[1] < ... < arr[i-1] < arr[i] > arr[i+1] > ... > arr[arr.length-1]的下标i，即山峰顶部。
+*/
+
+/*
+ * 15、给你一个下标从0开始的整数数组nums以及一个目标元素target。
+ * 目标下标是一个满足nums[i]==target的下标i。将nums按 非递减 顺序排序后，返回由nums中目标下标组成的列表。
+ * 如果不存在目标下标，返回一个空列表。返回的列表必须按递增顺序排列。
+ * 
+ */
+
+/*==========电子科大7-5算法题end=========*/
 
 #endif
