@@ -256,7 +256,27 @@ void testBiTree()
 
 	//testIsSubTree();
 
-	testBitreeExpandToList();
+	//testBitreeExpandToList();
+
+	//testDirectPrevInOrder();
+
+	//testIsSymmetricTree();
+
+	//testIsAVLTree();
+
+	//testBiTreeEquals();
+
+	//testBiTreeSymmetry();
+
+	//testBiTreeDepth();
+
+	//testBiTreeMinDepth();
+
+	//testExistsTargetSum();
+
+	testBiTreeDiameter();
+
+	//testBiTreeSlope();
 
 }
 
@@ -916,15 +936,13 @@ bool bitreeIsEqual(BiTree T1, BiTree T2)
 		return false;
 	if (!bitreeIsEqual(T1->left, T2->left))
 		return false;
-	if (!bitreeIsEqual(T1->right, T2->right))
-		return false;
-	return true;
+	return bitreeIsEqual(T1->right, T2->right);
 }
 
 bool isSubTree(BiTree A, BiTree B)
 {
 	if (A == NULL || B == NULL) return false;
-	if (A->elem == B->elem && bitreeIsEqual(A, B))
+	if ((A->elem == B->elem) && bitreeIsEqual(A, B))
 		return true;
 	if (isSubTree(A->left, B))
 		return true;
@@ -991,5 +1009,280 @@ void testBitreeExpandToList()
 		printBiNode(p);
 		p = p->right;
 	}
+	DestroyBiTree(bitree);
+}
+
+bool directPrevInOrder(BiTree bitree, BiNode** prev, BiElemType x)
+{
+	if (bitree == NULL) return false;
+	if (directPrevInOrder(bitree->left, prev, x)) // 在左子树找到了
+		return true;
+	if (bitree->elem == x) // 当前结点值为x，prev就是直接前驱，返回true
+		return true;
+	*prev = bitree;
+	return directPrevInOrder(bitree->right, prev, x);
+}
+
+void testDirectPrevInOrder()
+{
+	puts("为找结点值为x的结点在中序下的直接前驱");
+	BiTree bitree = createDefaultBiTree();
+
+	BiNode* prev = NULL;
+	directPrevInOrder(bitree, &prev, 28);
+	printf("28的前驱为%d\n", prev->elem);
+	directPrevInOrder(bitree, &prev, 39);
+	printf("39的前驱为%d\n", prev->elem);
+
+	DestroyBiTree(bitree);
+}
+
+bool isSymmetricTree(BiTree root)
+{
+	if (root == NULL)
+		return false;
+	return doIsSymmetricTree(root->left, root->right);
+}
+
+bool doIsSymmetricTree(BiNode* left, BiNode* right)
+{
+	if (!left && !right)
+		return true;
+	else if ((left && !right) || (!left && right)) // 一个为NULL，一个不为NULL
+		return false;
+	// 若要求结点也对称，则取消注释这一行
+	//if (left->elem != right->elem) return false;
+
+	if (!doIsSymmetricTree(left->left, right->right))
+		return false;
+	return doIsSymmetricTree(left->right, right->left);
+}
+
+void testIsSymmetricTree()
+{
+	/*
+	 *		 1
+	 *	  /	   \
+	 *   2	    5
+	 *	  \	   /
+	 *	   3  6
+	 *	  /	   \
+	 *   4		7
+	 */
+	BiTree T = NULL;
+	BiElemType elems[] = { 1,2,'#',3,4,'#','#','#',5,6,'#',7,'#','#','#'};
+	InitBiTree(&T, elems, sizeof(elems) / sizeof(elems[0]));
+
+	printf("二叉树是否关于根结点呈镜像对称？%d\n", isSymmetricTree(T));
+
+	DestroyBiTree(T);
+}
+
+bool isAVLTree(BiTree bitree, int* height)
+{
+	if (bitree == NULL) return true;
+	int leftHeight = 0, rightHeight = 0;
+	if (!isAVLTree(bitree->left, &leftHeight))
+		return false;
+	if (!isAVLTree(bitree->right, &rightHeight))
+		return false;
+	*height = 1 + max(leftHeight, rightHeight);
+	return abs(leftHeight - rightHeight) <= 1;
+}
+
+void testIsAVLTree()
+{
+	puts("判断是否为平衡二叉树。");
+
+	/*
+	 *		10
+	 *	  /	   \
+	 *   7	    13
+	 *	  \	   /  \
+	 *	   8 11	   15
+	 */
+	BiTree T1 = NULL;
+	BiElemType elems[] = { 10,7,'#',8,'#','#',13,11,'#','#',15,'#','#' };
+	InitBiTree(&T1, elems, sizeof(elems) / sizeof(elems[0]));
+	int T1_height = 0;
+	printf("T1是否为平衡二叉树？%d\n", isAVLTree(T1, &T1_height));
+
+
+	/*
+	 *		10
+	 *	  /	   \
+	 *   7	    13
+	 *	  \	   /  
+	 *	   8 11
+	 *		   \
+	 *		    12
+	 */
+	BiTree T2 = NULL;
+	BiElemType elems2[] = { 10,7,'#',8,'#','#',13,11,'#',12,'#','#' };
+	InitBiTree(&T2, elems2, sizeof(elems2) / sizeof(elems2[0]));
+	int T2_height = 0;
+	printf("T2是否为平衡二叉树？%d\n", isAVLTree(T2, &T2_height));
+
+	DestroyBiTree(T1);
+	DestroyBiTree(T2);
+}
+
+bool BiTreeEquals(BiTree T1, BiTree T2)
+{
+	if (!T1 && !T2) return true;
+	else if (T1 && T2) {
+		if (T1->elem != T2->elem)
+			return false;
+		if (!BiTreeEquals(T1->left, T2->left))
+			return false;
+		return BiTreeEquals(T2->right, T2->right);
+	}
+	return false;
+}
+
+void testBiTreeEquals()
+{
+	puts("给你两棵二叉树的根结点p和q，编写一个函数来检验这两棵树是否相同。");
+
+	BiTree T1 = createDefaultBiTree();
+	BiTree T2 = createDefaultBiTree();
+
+	printf("T1和T2是否相同？%d\n", BiTreeEquals(T1, T2));
+
+	DestroyBiTree(T1);
+	DestroyBiTree(T2);
+}
+
+void testBiTreeSymmetry()
+{
+	/*
+	 *		 1
+	 *	  /	   \
+	 *   2	    2
+	 *	  \	   /
+	 *	   3  3
+	 *	  /	   \
+	 *   4		5
+	 */
+	BiTree T = NULL;
+	BiElemType elems[] = { 1,2,'#',3,4,'#','#','#',2,3,'#',5,'#','#','#' };
+	InitBiTree(&T, elems, sizeof(elems) / sizeof(elems[0]));
+
+	printf("二叉树是否轴对称？%d\n", isSymmetricTree(T));
+
+	DestroyBiTree(T);
+}
+
+void bitreeDepth(BiTree bitree, int currHeight, int* height)
+{
+	if (bitree == NULL) return;
+	if (currHeight >= *height)
+		*height = currHeight;
+	bitreeDepth(bitree->left, ++currHeight, height);
+	--currHeight;
+	bitreeDepth(bitree->right, ++currHeight, height);
+	--currHeight;
+}
+
+void testBiTreeDepth()
+{
+	puts("给定一棵二叉树，找出其最大深度。二叉树的深度为根结点到最远叶子结点的最长路径上的结点树。");
+	BiTree bitree = createDefaultBiTree();
+	int height = 0;
+	bitreeDepth(bitree, 1, &height);
+	printf("二叉树深度为：%d\n", height);
+	DestroyBiTree(bitree);
+}
+
+int BiTreeMinDepth(BiTree bitree)
+{
+	if (bitree == NULL)
+		return 0;
+	else if (bitree->left && bitree->right) // 左右子树都存在
+		return 1 + min(BiTreeMinDepth(bitree->left), BiTreeMinDepth(bitree->right));
+	else if (bitree->left) // 只有左子树
+		return 1 + BiTreeMinDepth(bitree->left);
+	else if (bitree->right) // 只有右子树
+		return 1 + BiTreeMinDepth(bitree->right);
+	else // 叶子结点
+		return 1;
+}
+
+void testBiTreeMinDepth()
+{
+	puts("给定一个二叉树，找出其最小深度。最小深度是从根结点到最近叶子结点的最短路径上的结点数量。");
+	BiTree bitree = createDefaultBiTree();
+	printf("二叉树最小深度为：%d\n", BiTreeMinDepth(bitree));
+	DestroyBiTree(bitree);
+}
+
+bool existsTargetSum(BiTree bitree, int prevSum, int targetSum)
+{
+	if (bitree == NULL) return false;
+
+	int currSum = prevSum + bitree->elem;
+
+	// 若假设结点值大于等于0，则可取消注释下面两行
+	//if (currSum > targetSum)
+	//	return false;
+
+	if (currSum == targetSum)
+		return true;
+	if (existsTargetSum(bitree->left, currSum, targetSum))
+		return true;
+	return existsTargetSum(bitree->right, currSum, targetSum);
+}
+
+void testExistsTargetSum()
+{
+	puts("判断二叉树是否存在某路径上所有结点值的和与目标和targetSum相等。");
+	BiTree bitree = createDefaultBiTree();
+	int targetSum = 118;
+	printf("是否存在targetSum=%d？%d\n", targetSum, existsTargetSum(bitree, 0, targetSum));
+	targetSum = 119;
+	printf("是否存在targetSum=%d？%d\n", targetSum, existsTargetSum(bitree, 0, targetSum));
+	DestroyBiTree(bitree);
+}
+
+int BiTreeDiameter(BiTree bitree, int* height)
+{
+	if (bitree == NULL) return 0;
+	int leftHeight = 0;
+	int leftDiameter = BiTreeDiameter(bitree->left, &leftHeight);
+	int rightHeight = 0;
+	int rightDiameter = BiTreeDiameter(bitree->right, &rightHeight);
+	int diameter = leftHeight + rightHeight + 1;
+	*height = max(leftHeight, rightHeight) + 1;
+	// 返回三个直径的最大值
+	return max(diameter, max(leftDiameter, rightDiameter));
+}
+
+void testBiTreeDiameter()
+{
+	puts("给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。");
+	BiTree bitree = createDefaultBiTree();
+	int height = 0;
+	printf("二叉树的直径长度为：%d\n", BiTreeDiameter(bitree, &height));
+	DestroyBiTree(bitree);
+}
+
+int BiTreeSlope(BiTree bitree, int* nodeCount)
+{
+	if (bitree == NULL) return 0;
+	int leftCount = 0;
+	int leftSlope = BiTreeSlope(bitree->left, &leftCount);
+	*nodeCount += leftCount;
+	int rightCount = 0;
+	int rightSlope = BiTreeSlope(bitree->right, &rightCount);
+	*nodeCount += rightCount + 1;
+	return leftSlope + rightSlope + abs(leftCount - rightCount);
+}
+
+void testBiTreeSlope()
+{
+	puts("给你一个二叉树的根结点root，计算并返回整个树的坡度。");
+	BiTree bitree = createDefaultBiTree();
+	int nodeCount = 0;
+	printf("二叉树的坡度为：%d\n", BiTreeSlope(bitree, &nodeCount));
 	DestroyBiTree(bitree);
 }
