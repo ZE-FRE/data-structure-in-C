@@ -54,7 +54,7 @@ int LocateSqElem(const SqList* list, const SqElemType elem, Compare compare)
 
 bool PriorSqElem(const SqList* list, const SqElemType cur, SqElemType* pre)
 {
-	int curPos = LocateSqElem(list, cur, sqElemEqauls);
+	int curPos = LocateSqElem(list, cur, sqElemEquals);
 	// 未找到或是第一个元素
 	if (curPos <= 1) return false;
 	*pre = list->base[curPos - 2];
@@ -63,7 +63,7 @@ bool PriorSqElem(const SqList* list, const SqElemType cur, SqElemType* pre)
 
 bool NextSqElem(const SqList* list, const SqElemType cur, SqElemType* next)
 {
-	int curPos = LocateSqElem(list, cur, sqElemEqauls);
+	int curPos = LocateSqElem(list, cur, sqElemEquals);
 	// 未找到或是最后一个元素
 	if (curPos == -1 || curPos == SqListLength(list)) return false;
 	*next = list->base[curPos];
@@ -126,12 +126,12 @@ void UnionSqList(SqList* La, const SqList *Lb)
 	SqElemType elem;
 	for (int i = 1; i <= Lb_length; ++i) {
 		GetSqElem(Lb, i, &elem);
-		if (!LocateSqElem(La, elem, sqElemEqauls))
+		if (!LocateSqElem(La, elem, sqElemEquals))
 			SqListInsert(La, ++La_length, elem);
 	}
 }
 
-bool sqElemEqauls(const SqElemType elem1, const SqElemType elem2)
+bool sqElemEquals(const SqElemType elem1, const SqElemType elem2)
 {
 	return elem1 == elem2;
 }
@@ -214,7 +214,16 @@ void testSqList()
 
 	//testNegativeBeforePositive();
 
-	testTransformSqlist();
+	//testTransformSqlist();
+
+	//testFindAbsent();
+
+	//testPrintArrIntersection();
+
+	//testPrintArrIntersection();
+
+	testLostKInt();
+
 }
 
 
@@ -701,5 +710,127 @@ void testTransformSqlist()
 	printf("改造后的顺序表：");
 	for (int i = 0; i < n; ++i)
 		printf("%d ", arr[i]);
+}
+
+int findAbsent(int nums[], int n)
+{
+	int* arr = (int*)calloc(n+1, sizeof(int));
+	if (!arr) return -1;
+
+	for (int i = 0; i < n; ++i) 
+		arr[nums[i]] = 1;
+
+	for (int i = 0; i <= n; ++i) 
+		if (arr[i] == 0) {
+			free(arr);
+			return i;
+		}
+	return -1;
+}
+
+void testFindAbsent()
+{
+	puts("找出[0,n]没有出现的数。");
+	int nums[] = {0,5,2,3,1};
+	printf("未出现的数是：%d\n", findAbsent(nums, sizeof(nums) / sizeof(int)));
+
+	int nums2[] = { 0,4,2,3,1 };
+	printf("未出现的数是：%d\n", findAbsent(nums2, sizeof(nums2) / sizeof(int)));
+}
+
+void bubbleSortArr(int arr[], int n)
+{
+	for (int i = n-1; i > 0; --i) {
+		for (int j = 0; j < i; ++j) {
+			if (arr[j] > arr[j + 1]) {
+				int temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+			}
+		}
+	}
+}
+
+SqList* printArrIntersection(int nums1[], int len1, int nums2[], int len2)
+{
+	bubbleSortArr(nums1, len1);
+	bubbleSortArr(nums2, len2);
+
+	SqList* sqlist = (SqList*)malloc(sizeof(SqList));
+	if (!sqlist) return NULL;
+	InitSqList(sqlist);
+	int last = -1;
+	for (int i = 0, j = 0; i < len1 && j < len2;) {
+		if (nums1[i] < nums2[j])
+			++i;
+		else if (nums1[i] > nums2[j])
+			++j;
+		else {
+			if (nums1[i] != last) {
+				SqListInsert(sqlist, SqListLength(sqlist) + 1, nums1[i]);
+				last = nums1[i];
+			}
+			++i;
+			++j;
+		}
+	}
+	return sqlist;
+}
+
+void testPrintArrIntersection()
+{
+	puts("给定两个数组nums1和nums2，返回它们的交集。输出结果中的每个元素一定是唯一的。我们可以不考虑输出结果的顺序。");
+	int nums1[] = { 2,6,1,7,5,2,4,3,1,8 };
+	int len1 = sizeof(nums1) / sizeof(int);
+
+	int nums2[] = { 2,6,1,7,5,2,4,3,1,8,1,2,3 };
+	int len2 = sizeof(nums2) / sizeof(int);
+
+	SqList *sqlist = printArrIntersection(nums1, len1, nums2, len2);
+
+	printf("nums1和nums2的交集为：");
+	SqListTraverse(sqlist, printSqElem);
+
+	DestroySqList(sqlist);
+	free(sqlist);
+}
+
+int lostKInt(unsigned int arr[], int len, int k)
+{
+	int positiveInt = 0;
+	int i = 0;
+	while (i < len && k > 0) {
+		++positiveInt;
+		if (arr[i] == positiveInt) 
+			++i;
+		else 
+			--k;
+	}
+	while (k > 0) { // 数组遍历完毕，还未找到第k个缺失的正整数
+		++positiveInt;
+		--k;
+	}
+	return positiveInt;
+}
+
+void testLostKInt()
+{
+	unsigned int arr[] = { 1,2,4,5,7,9 };
+	int k = 3;
+	printf("第%d个缺失的正整数为：%d\n", k, lostKInt(arr, sizeof(arr) / sizeof(unsigned int), k));
+	k = 5;
+	printf("第%d个缺失的正整数为：%d\n", k, lostKInt(arr, sizeof(arr) / sizeof(unsigned int), k));
+}
+
+biarray_ptr findIndicesTarget(int numbers[], int len, int target)
+{
+	biarray_ptr ptr = (biarray_ptr)malloc(sizeof(biarray));
+	if (!ptr) return NULL;
+
+	return ptr;
+}
+
+void testFindIndicesTarget()
+{
 }
 
