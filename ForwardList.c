@@ -208,9 +208,18 @@ void printList(const ForwardList list)
         ListTraverse(list, printListElem);
 }
 
+ListNode* newListNode(ListElemType elem)
+{
+    ListNode* newNode = (ListNode*)malloc(sizeof(ListNode));
+    if (!newNode) return NULL;
+    newNode->elem = elem;
+    newNode->next = NULL;
+    return newNode;
+}
+
 ForwardList createListFromArray(const int arr[], int len)
 {
-    ForwardList list;
+    ForwardList list = NULL;
     InitList(&list);
     for (int i = 0; i < len; ++i) 
         ListInsert(list, i + 1, arr[i]);
@@ -347,7 +356,17 @@ void testForwardList()
 
     //testListDeleteAbsDuplicates();
 
-    testRearrangeList();
+    //testRearrangeList();
+
+    //testSiftRepetition();
+
+    //testIsSymmetricList();
+
+    //testListMid();
+
+    //testListSum();
+
+    testDeleteListDuplicates();
 
 }
 
@@ -1077,6 +1096,263 @@ CyclicNode* newCyclicNode(int data)
     newNode->data = data;
     newNode->next = NULL;
     return newNode;
+}
+
+
+SqListArray* siftRepetition(ListNode* list)
+{
+    SqListArray* p_arr = (SqListArray*)malloc(sizeof(SqListArray));
+    if (!p_arr) return NULL;
+
+    // 初始化数组
+    for (int i = 0; i < MAX_REPETITION; ++i)
+        InitSqList(&(*p_arr)[i]);
+        
+
+    ListNode* p = list;
+    while (p) {
+        for (int i = 0; i < MAX_REPETITION; ++i) {
+            SqList *sqlist = &(*p_arr)[i];
+            SqElemType elem;
+            if (SqListEmpty(sqlist)) {
+                SqListInsert(sqlist, SqListLength(sqlist) + 1, p->elem);
+                break;
+            }
+            else {
+                GetSqElem(sqlist, SqListLength(sqlist), &elem);
+                if (elem < p->elem) {// 当前遍历结点元素与当前顺序表最后一个元素进行比较
+                    SqListInsert(sqlist, SqListLength(sqlist) + 1, p->elem);
+                    break;
+                }
+            }
+        }
+        p = p->next;
+    }
+    return p_arr;
+}
+
+void testSiftRepetition()
+{
+    puts("分化。");
+    int elems[] = { 1, 2 ,2, 3, 3 ,3, 4, 4, 5, 5, 6 };
+    ForwardList list = createListFromArray(elems, sizeof(elems) / sizeof(int));
+    SqListArray* p_arr = siftRepetition(list->next);
+
+    // 打印结果
+    for (int i = 0; i < MAX_REPETITION; ++i) {
+        SqList* sqlist = &(*p_arr)[i];
+        if (SqListEmpty(sqlist)) continue;
+        SqElemType elem;
+        for (int j = 1; j <= SqListLength(sqlist); ++j) {
+            GetSqElem(sqlist, j, &elem);
+            printf("%d ", elem);
+        }
+        printf("\n");
+    }
+    // 释放内存空间
+    for (int i = 0; i < MAX_REPETITION; ++i) {
+        SqList* sqlist = &(*p_arr)[i];
+        DestroySqList(sqlist);
+    }
+    DestroyList(&list);
+    free(p_arr);
+}
+
+bool isSymmetricList(ForwardList list)
+{
+    ListNode *slow, *fast;
+    slow = fast = list->next;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    
+    ListNode* p = slow;
+    if (fast) {// 说明链表长度为奇数，此时slow指向正中间的结点
+        p = p->next;
+        puts("奇数");
+    }
+
+    ListNode* newListHead = (ListNode*)malloc(sizeof(ListNode));
+    newListHead->next = NULL;
+
+    ListNode* insertNode = NULL;
+    while (p) {
+        insertNode = (ListNode*)malloc(sizeof(ListNode));
+        if (!insertNode) return false;
+        insertNode->elem = p->elem;
+        insertNode->next = newListHead->next;
+        newListHead->next = insertNode;
+        p = p->next;
+    }
+
+    // 比较
+    ListNode* part1 = list->next;
+    ListNode* part2 = newListHead->next;
+    bool ret = true;
+    while (part2) {
+        if (part1->elem != part2->elem) {
+            ret = false;
+            break;
+        }
+        part1 = part1->next;
+        part2 = part2->next;
+    }
+    // 回收内存空间
+    DestroyList(&newListHead);
+    return ret;
+}
+
+void testIsSymmetricList()
+{
+    puts("给你一个单链表的头结点head，请你判断该链表是否为回文链表。如果是，返回true；否则，返回false。");
+    int elemsEven[] = { 1,2,3,3,2,1 };
+    ForwardList listEven = createListFromArray(elemsEven, sizeof(elemsEven) / sizeof(int));
+    printf("偶数个数，是否为回文链表？%d\n", isSymmetricList(listEven));
+
+    int elemsOdd[] = { 1,2,3,4,3,2,1 };
+    ForwardList listOdd = createListFromArray(elemsOdd, sizeof(elemsOdd) / sizeof(int));
+    printf("奇数个数，是否为回文链表？%d\n", isSymmetricList(listOdd));
+
+    DestroyList(&listEven);
+    DestroyList(&listOdd);
+}
+
+ListNode* listMid(ForwardList list)
+{
+    ListNode *slow, *fast;
+    slow = fast = list->next;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+
+void testListMid()
+{
+    puts("给定一个头结点为head的非空单链表，返回链表的中间结点。如果有两个中间结点，则返回第二个中间结点。");
+    int elemsEven[] = { 1,2,3,3,2,1 };
+    ForwardList listEven = createListFromArray(elemsEven, sizeof(elemsEven) / sizeof(int));
+    printf("链表长度为偶数，中间结点值为：%d\n", listMid(listEven)->elem);
+
+    int elemsOdd[] = { 1,2,3,4,3,2,1 };
+    ForwardList listOdd = createListFromArray(elemsOdd, sizeof(elemsOdd) / sizeof(int));
+    printf("链表长度为奇数，中间结点值为：%d\n", listMid(listOdd)->elem);
+
+    DestroyList(&listEven);
+    DestroyList(&listOdd);
+}
+
+ForwardList listSum(ListNode* L1, ListNode* L2)
+{
+    ListNode* sumList = newListNode(0);
+    ListNode* sumListRear = sumList;
+
+    if (L1->elem == 0)
+        return L2;
+    else if (L2->elem == 0)
+        return L1;
+
+    // 进位，0或1
+    int overflow = 0;
+    while (L1 && L2) {
+        int sum = L1->elem + L2->elem + overflow;
+        if (sum > 9) {
+            sum = sum % 10;
+            overflow = 1;
+        }
+        else {
+            overflow = 0;
+        }
+        ListNode* newNode = newListNode(sum);
+        sumListRear = sumListRear->next = newNode;
+        L1 = L1->next;
+        L2 = L2->next;
+    }
+    if (overflow) {
+        if (L1) {
+            ListNode* newNode = newListNode(L1->elem) + overflow;
+            sumListRear = sumListRear->next = newNode;
+            L1 = L1->next;
+        }
+        else if (L2) {
+            ListNode* newNode = newListNode(L2->elem) + overflow;
+            sumListRear = sumListRear->next = newNode;
+            L2 = L2->next;
+        }
+        else {
+            ListNode* newNode = newListNode(overflow);
+            sumListRear = sumListRear->next = newNode;
+        }
+    }
+    while (L1) {
+        ListNode* newNode = newListNode(L1->elem);
+        sumListRear = sumListRear->next = newNode;
+        L1 = L1->next;
+    }
+    while (L2) {
+        ListNode* newNode = newListNode(L2->elem);
+        sumListRear = sumListRear->next = newNode;
+        L2 = L2->next;
+    }
+    return sumList;
+}
+
+void testListSum()
+{
+    puts("链表求和。");
+
+    int elems1[] = { 1,1 };
+    ForwardList L1 = createListFromArray(elems1, sizeof(elems1) / sizeof(int));
+    int elems2[] = { 9,8 };
+    ForwardList L2 = createListFromArray(elems2, sizeof(elems2) / sizeof(int));
+
+    ForwardList sum = listSum(L1->next, L2->next);
+
+    printList(L1);
+    printf("\n + \n");
+    printList(L2);
+    printf("\n = \n");
+    printList(sum);
+
+    DestroyList(&L1);
+    DestroyList(&L2);
+    DestroyList(&sum);
+}
+
+ListNode* deleteListDuplicates(ListNode* head)
+{
+    ListNode* prev = head;
+    ListNode* p = head->next;
+    ListNode* q = NULL;
+    while (p) {
+        if (p->elem == prev->elem) {
+            q = p;
+            prev->next = p->next;
+            p = p->next;
+            free(q);
+        }
+        else {
+            prev = p;
+            p = p->next;
+        }
+    }
+    return head;
+}
+
+void testDeleteListDuplicates()
+{
+    puts("给定一个已排序的链表的头head，删除所有重复的元素，使每个元素只出现一次。返回已排序的链表。");
+    int elems[] = { 1,1,2,3,3,4,4,5,5,5,6,7,7,8 };
+    ForwardList list = createListFromArray(elems, sizeof(elems) / sizeof(int));
+
+    deleteListDuplicates(list->next);
+
+    printf("删除后重复元素后：");
+    printList(list);
+
+    DestroyList(&list);
 }
 
 
