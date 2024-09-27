@@ -1,4 +1,4 @@
-#include "Queue.h"
+﻿#include "Queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -65,8 +65,8 @@ bool queue_grow(Queue* queue)
         queue->array_length = newArrLen;
         queue->front = 0;
         queue->rear = queue_length;
-        return true;
     }
+    return true;
 }
 
 bool EnQueue(Queue* queue, const QueueElemType data)

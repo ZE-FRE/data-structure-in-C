@@ -1,4 +1,4 @@
-#ifndef SQLIST_H_
+﻿#ifndef SQLIST_H_
 #define SQLIST_H_
 
 #include <stdbool.h>
