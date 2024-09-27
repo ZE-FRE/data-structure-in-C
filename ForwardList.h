@@ -49,6 +49,8 @@ void SortList(ForwardList list);
 
 void printList(const ForwardList list);
 
+ListNode* newListNode(ListElemType elem);
+
 ForwardList createListFromArray(const int arr[], int len);
 
 void testForwardList();
@@ -140,7 +142,7 @@ void testListIsSub();
  * 11：设计一个算法用于判断带头结点的循环双链表是否对称。
  * date:2024/8/13
  * 思路：头结点后继是第一个结点p，前驱是最后一个结点q，比较p和q结点值是否相同，若相同，p向后走，q向前走；若不相同，
- * 则说明不对称，返回false。当p和q相遇时，即p==q || p->prior == q时，遍历完毕，返回true。
+ * 则说明不对称，返回false。当p和q相遇时，即p==q || p->next == q时，遍历完毕，返回true。
  */
 
 /*
@@ -276,36 +278,125 @@ void rearrangeList(ForwardList list);
 void testRearrangeList();
 
 
-/*==========王道书第2章链表算法题=========*/
+/*==========王道书第2章链表算法题end=========*/
 
 
+
+ /*==========电子科大算法题真题=========*/
 
 /*
- * 【2004真题1】试编写算法，将一个带头结点的单循环链表A，按结点值分解为奇数和偶数两个具有相同结构的链表A和C，
+ *【2004真题1】试编写算法，将一个带头结点的单循环链表A，按结点值分解为奇数和偶数两个具有相同结构的链表A和C，
  * 其中C的结点是原A中结点值为偶数的结点。要求利用原链表的结点。可用ODD(p)逻辑函数判断指针p的值data是否为奇数，是则返回true。
  * date:2024/9/5
  */
 void splitOddEven(CyclicNode *A, CyclicNode *C);
 
 /*
- * 【2007真题1】设p,q分别指向两个不带头结点的单循环链表中的某个结点，试编写一个算法，
+ *【2007真题1】设p,q分别指向两个不带头结点的单循环链表中的某个结点，试编写一个算法，
  * 用O(1)时间将这两个单链表合并为一个，并令p指向p和q两者data域值较小的结点。
  */
 
 /*
- * 【2010真题1】设p为指向循环单链表L中某一结点的指针，循环单链表L既无头结点也无头指针，长度大于1，结点指针域为next，
+ *【2010真题1】设p为指向循环单链表L中某一结点的指针，循环单链表L既无头结点也无头指针，长度大于1，结点指针域为next，
  * 试编写算法，完成删除p所指结点的前趋结点。
  * date:2024/9/6
  */
 void deleteCyclicNodePrev(CyclicNode* p);
 
 /*
- * 【2011真题3】编写一算法将顺序表转存为带头结点的单循环链表。算法中所用到的数据结构需自行定义。
+ *【2011真题3】编写一算法将顺序表转存为带头结点的单循环链表。算法中所用到的数据结构需自行定义。
  * date:2024/9/6
  */
 #include "SqList.h"
 CyclicNode* sqListToCyclicList(const SqList* sqlist);
 CyclicNode* newCyclicNode(int data);
+
+
+/*
+ *【2020真题1】计算机内部各个进程的资源申请序列以链表形式存储。
+ * 为节省计算机存储空间，现将对同一资源的申请存放在同一物理存储单元中。
+ * 试设计一个算法，求出申请资源序列从某一资源开始完全一致的资源申请序列。
+ * 要求时间复杂度不大于O(n)，若时间复杂度大于O(n)，此题得零分。
+ * date:2024/9/20
+ * 与王道18题为同一题。
+ */
+
+
+/*
+ *【2022真题1】给定一个不递减的带头结点的单链表，将这些结点分化为不含相同结点的几个递增序列，重复次数最多10次，
+ * 把它分成若干没有重复数字的递增序列，如1 2 2 3 3 3 4 4 5 5 6分成：
+ * 1 2 3 4 5 6
+ * 2 3 4 5
+ * 3
+ * date:2024/9/24
+ * 思路：很类似进程调度的多级反馈队列调度算法模型。
+ */
+#define MAX_REPETITION 10
+#include "SqList.h"
+ // 定义顺序表数组类型
+typedef SqList SqListArray[MAX_REPETITION];
+/*
+ * 分化，返回数组指针
+ */
+SqListArray* siftRepetition(ListNode *list);
+void testSiftRepetition();
+
+/*==========电子科大算法题真题end=========*/
+
+
+
+/*==========电子科大7-5算法题=========*/
+
+/*
+ * 7、给你一个链表的头结点head，判断链表中是否有环。如果链表中存在环，则返回true。否则，返回false。
+ * date:2024/9/24
+ * 同王道15
+ */
+
+/*
+ * 8、给你一个单链表的头结点head，请你判断该链表是否为回文链表。如果是，返回true；否则，返回false。
+ * date:2024/9/24
+ * 思路：先用快慢指针找到链表中间位置，将后半部分用于创建逆置的新链表，将链表前半部分与新链表进行进行比较。
+ */
+bool isSymmetricList(ForwardList list);
+void testIsSymmetricList();
+
+/*
+ * 9、给定一个头结点为head的非空单链表，返回链表的中间结点。如果有两个中间结点，则返回第二个中间结点。
+ * date:2024/9/24
+ * 思路：快慢指针。有两个中间结点的意思是说链表长度是偶数。
+ * fast的变化规律为：1、3、5、7...  所以当链表长度为奇数时，fast指向最后一个结点；
+ * 当长度为偶数时，fast指向最后一个结点的后一个位置（NULL）。
+ * 当链表长度为奇数时，slow指向正中间的结点；当长度为偶数时，有两个中间结点，slow刚好指向第二个中间结点。
+ * (注：当长度为偶数时，若要让slow指向第一个中间结点，只需要初始让slow指向头结点即可，fast仍指向第一个结点)
+ */
+ListNode* listMid(ForwardList list);
+void testListMid();
+
+/*
+ * 10、将两个升序链表合并为一个新的升序链表并返回。新链表是通过拼接给定的两个链表的所有结点组成的。
+ * date:2024/9/24
+ * 上面已完成。MergeList()
+ */
+
+/*
+ * 11、给你两个非空的链表，表示两个非负的整数。它们每位数字都是按照逆序的方式存储的，并且每个结点只能存储一位数字。
+ * 请你将两个数相加，并以相同形式返回一个表示和的链表。你可以假设除了数字0之外，这两个数都不会以0开头。
+ * date:2024/9/24
+ */
+ForwardList listSum(ListNode* L1, ListNode* L2);
+void testListSum();
+
+/*
+ *12、给定一个已排序的链表的头head，删除所有重复的元素，使每个元素只出现一次。返回已排序的链表。
+ * date:2024/9/25
+ * 思路：遍历链表过程中，当前结点值与上一个结点值进行比较，若相同，则删除。
+ */
+ListNode* deleteListDuplicates(ListNode *head);
+void testDeleteListDuplicates();
+
+
+/*==========电子科大7-5算法题end=========*/
 
 #endif
 
