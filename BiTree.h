@@ -93,7 +93,7 @@ void testContraryLevelOrder();
 /*
  * 05：假设二叉树采用二叉链表存储结构，设计一个非递归算法求二叉树的高度。
  * date:2024/8/25
- * 思路：非递归后序遍历二叉树，二叉树的高度，即为遍历过程中，栈出现的最大长度。
+ * 思路：遍历二叉树，二叉树的高度，即为遍历过程中，栈出现的最大长度。
  */
 int bitreeHeight(BiTree bitree);
 void testBiTreeHeight();
@@ -184,7 +184,6 @@ void testBitreeWidth();
 /*
  * 14：设有一棵满二叉树（所有结点值均不同），已知其先序序列为pre，设计一个算法求其后序序列post。
  * date:2024/8/30
- * 思路：
  */
 void fullBiTreePreToPost(int pre[], int pre_begin, int pre_end, int post[], int post_end);
 void testFullBiTreePreToPost();
@@ -277,6 +276,9 @@ void testSqBiTreeIsBST();
 /*==========王道书第5章二叉树算法题=========*/
 
 
+
+ /*==========电子科大算法题真题=========*/
+
 /*
  * 【2007真题2】设二叉树采用二叉链表存储，结点结构为lchild、data和rchild，试编写输出二叉树中从根结点到每个叶结点的路径的算法。
  * 设二叉树最长路径结点个数小于m，可以使用队列S[1:m]，初始时S.rear=S.front=1。
@@ -331,6 +333,128 @@ void testIsSubTree();
  */
 BiNode* bitreeExpandToList(BiNode* root);
 void testBitreeExpandToList();
+
+/*
+ *【2020真题2】一个二叉排序树中，如何寻找结点值小于x且是所有满足该条件的结点中值最大的结点？
+ * date:2024/9/20
+ * 思路：题目意思为找结点值为x的结点在中序下的直接前驱。则只需在中序遍历时，记录直接前驱，当遍历结点值为x时，返回true。
+ */
+bool directPrevInOrder(BiTree bitree, BiNode** prev, BiElemType x);
+void testDirectPrevInOrder();
+
+/*
+ * 【2021真题2】判断二叉树的对称性：判断二叉树是否关于根结点呈镜像对称，只要求结构对称，不要求数值也对称，是返回1，否则返回0。
+ * 参考函数原型：int IsSymmetricTree(BiTreeNode *root)
+ * date:2024/9/20
+ * 思路：从根结点下的左、右孩子开始，判断对称条件为：left->left与right->right都存在或都不存在，
+ * 以及left->right与right->left都存在或都不存在。
+ */
+bool isSymmetricTree(BiTree root);
+bool doIsSymmetricTree(BiNode* left, BiNode* right);
+void testIsSymmetricTree();
+
+/*
+ *【2022真题2】给了二叉树的数据结构，判断是否为平衡二叉树。
+ * date:2024/9/23
+ * 思路：后序遍历二叉树，分别判断左、右子树是否为平衡二叉树，同时计算左、右子树的高度。
+ */
+bool isAVLTree(BiTree bitree, int* height);
+void testIsAVLTree();
+
+/*==========电子科大算法题真题end=========*/
+
+
+
+/*==========电子科大7-5算法题=========*/
+
+/*
+ * 1、给定一个二叉树的根结点root，返回它的中序遍历。
+ */
+
+/*
+ * 2、给你两棵二叉树的根结点p和q，编写一个函数来检验这两棵树是否相同。
+ * 如果两棵树在结构上相同，并且结点具有相同的值，则认为它们是相同的。
+ * date:2024/9/25
+ * 思路：先序遍历
+ * 若p和q都为空，返回true；
+ * 若p和q一个为空，一个不为空，则返回false；
+ * 若p和q都不为空，结点值不同返回false，若结点值相同，则再遍历左子树、右子树
+ */
+bool BiTreeEquals(BiTree T1, BiTree T2);
+void testBiTreeEquals();
+
+/*
+ * 3、给你一个二叉树的根结点root，检查它是否轴对称。
+ * date:2024/9/25
+ * 思路：类似【2021真题2】，但在结构对称的基础上，此题要求结点值也对称。
+ */
+void testBiTreeSymmetry();
+
+/*
+ * 4、给定一棵二叉树，找出其最大深度。二叉树的深度为根结点到最远叶子结点的最长路径上的结点树。
+ * date:2024/9/25
+ */
+void bitreeDepth(BiTree bitree, int currHeight, int *height);
+void testBiTreeDepth();
+
+/*
+ * 5、给你一个整数数组nums，其中元素已经按升序排序，请你将其转换为一棵高度平衡二叉搜索树。
+ * 高度平衡二叉树是一棵满足 每个结点的左右两个子树的高度差的绝对值不超过1的二叉树。
+ */
+
+/*
+ * 6、给定一棵二叉树，判断它是否是高度平衡的二叉树。
+ * 本题中，一棵高度平衡二叉树定义为：一个二叉树结点的左右两个子树的高度差的绝对值不超过1。
+ * date:2024/9/25
+ * 同【2022真题2】
+ */
+
+/*
+ * 7、给定一个二叉树，找出其最小深度。最小深度是从根结点到最近叶子结点的最短路径上的结点数量。
+ * date:2024/9/25
+ * 思路：后序遍历二叉树
+ */
+int BiTreeMinDepth(BiTree bitree);
+void testBiTreeMinDepth();
+
+/*
+ * 8、给你二叉树的根结点root和一个表示目标和的整数targetSum。判断该树中是否存在根结点到叶子结点的路径，
+ * 这条路径上的所有结点值相加等于目标和 targetSum。如果存在，返回true；否则，返回false。
+ * date:2024/9/25
+ * 思路：先序遍历
+ */
+bool existsTargetSum(BiTree bitree, int prevSum, int targetSum);
+void testExistsTargetSum();
+
+/*
+ * 9、给你一棵二叉树的根结点root，翻转这颗二叉树，并返回其根结点。
+ *[leetcode：https://leetcode.cn.problems/invert-binary-tree/]
+ * 已做过
+ */
+
+/*
+ *13、给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。
+ * 这条路径可能穿过也可能不穿过根结点。
+ * date:2024/9/26
+ * 思路：后序遍历，从底向上依次计算每个结点作为根结点的子树的直径长度，取左、右子树、当前结点直径长度的最大值，即为当前结点的直径长度。
+ * 
+ * param: height：当前树的高度
+ * return: 当前树的直径长度
+ */
+int BiTreeDiameter(BiTree bitree, int* height);
+void testBiTreeDiameter();
+
+/*
+ * 14、给你一个二叉树的根结点root，计算并返回整个树的坡度。
+ * 一个树的结点的坡度定义即为，该结点左子树的结点之和和右子树结点之和的差的绝对值。
+ * 如果没有左子树的话，左子树的结点之和为0；没有右子树的话也是一样。空结点的坡度是0。整个树的坡度就是其所有结点的坡度之和。
+ * date:2024/9/25
+ * 思路：后序遍历二叉树
+ */
+int BiTreeSlope(BiTree bitree, int *nodeCount);
+void testBiTreeSlope();
+
+/*==========电子科大7-5算法题end=========*/
 
 #endif
 
