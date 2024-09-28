@@ -1,8 +1,6 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
-#include "BstTree.h"
-
-#include "Stack.h"
+#include "../../include/bitree/BstTree.h"
 
 void InitBstTree(BstTree* treePtr, BstElemType arr[], int length)
 {

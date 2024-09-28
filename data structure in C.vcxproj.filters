@@ -13,90 +13,108 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\stack">
+      <UniqueIdentifier>{84a803b4-c0e6-43e6-9920-193404d278c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\queue">
+      <UniqueIdentifier>{998c3534-0a1e-4247-a84d-53391ab49db8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\bitree">
+      <UniqueIdentifier>{90b8d6c0-b279-448a-bc5a-d57b5ef8ccd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\stack">
+      <UniqueIdentifier>{2857b094-d657-475c-8b62-2ef20394afbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\queue">
+      <UniqueIdentifier>{1f9a5310-0df7-4a8d-8884-1e954db3ec73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\bitree">
+      <UniqueIdentifier>{f65eca40-1d63-4622-8110-878e791a359f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BstTree.h">
+    <ClInclude Include="include\ForwardList.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ForwardList.h">
+    <ClInclude Include="include\SqList.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="LinkQueue.h">
+    <ClInclude Include="include\String.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Queue.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="include\stack\SharedStack.h">
+      <Filter>头文件\stack</Filter>
     </ClInclude>
-    <ClInclude Include="QueueImpl2.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="include\stack\Stack.h">
+      <Filter>头文件\stack</Filter>
     </ClInclude>
-    <ClInclude Include="SharedStack.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="include\stack\StackImpl2.h">
+      <Filter>头文件\stack</Filter>
     </ClInclude>
-    <ClInclude Include="SqList.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="include\queue\LinkQueue.h">
+      <Filter>头文件\queue</Filter>
     </ClInclude>
-    <ClInclude Include="Stack.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="include\queue\Queue.h">
+      <Filter>头文件\queue</Filter>
     </ClInclude>
-    <ClInclude Include="StackImpl2.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="include\queue\QueueImpl2.h">
+      <Filter>头文件\queue</Filter>
     </ClInclude>
-    <ClInclude Include="String.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="include\queue\QueueImpl3.h">
+      <Filter>头文件\queue</Filter>
     </ClInclude>
-    <ClInclude Include="BiTree.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="include\queue\ReusableLinkQueue.h">
+      <Filter>头文件\queue</Filter>
     </ClInclude>
-    <ClInclude Include="QueueImpl3.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="include\bitree\BiTree.h">
+      <Filter>头文件\bitree</Filter>
     </ClInclude>
-    <ClInclude Include="ReusableLinkQueue.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="include\bitree\BstTree.h">
+      <Filter>头文件\bitree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BstTree.c">
+    <ClCompile Include="src\ForwardList.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ForwardList.c">
+    <ClCompile Include="src\SqList.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="LinkQueue.c">
+    <ClCompile Include="src\Startup.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Queue.c">
+    <ClCompile Include="src\String.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="QueueImpl2.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\stack\SharedStack.c">
+      <Filter>源文件\stack</Filter>
     </ClCompile>
-    <ClCompile Include="SharedStack.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\stack\Stack.c">
+      <Filter>源文件\stack</Filter>
     </ClCompile>
-    <ClCompile Include="SqList.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\stack\StackImpl2.c">
+      <Filter>源文件\stack</Filter>
     </ClCompile>
-    <ClCompile Include="Stack.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\queue\LinkQueue.c">
+      <Filter>源文件\queue</Filter>
     </ClCompile>
-    <ClCompile Include="StackImpl2.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\queue\Queue.c">
+      <Filter>源文件\queue</Filter>
     </ClCompile>
-    <ClCompile Include="Startup.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\queue\QueueImpl2.c">
+      <Filter>源文件\queue</Filter>
     </ClCompile>
-    <ClCompile Include="String.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\queue\QueueImpl3.c">
+      <Filter>源文件\queue</Filter>
     </ClCompile>
-    <ClCompile Include="BiTree.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\queue\ReusableLinkQueue.c">
+      <Filter>源文件\queue</Filter>
     </ClCompile>
-    <ClCompile Include="QueueImpl3.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\bitree\BiTree.c">
+      <Filter>源文件\bitree</Filter>
     </ClCompile>
-    <ClCompile Include="ReusableLinkQueue.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="src\bitree\BstTree.c">
+      <Filter>源文件\bitree</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

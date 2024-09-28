@@ -18,6 +18,37 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\bitree\BiTree.h" />
+    <ClInclude Include="include\bitree\BstTree.h" />
+    <ClInclude Include="include\ForwardList.h" />
+    <ClInclude Include="include\queue\LinkQueue.h" />
+    <ClInclude Include="include\queue\Queue.h" />
+    <ClInclude Include="include\queue\QueueImpl2.h" />
+    <ClInclude Include="include\queue\QueueImpl3.h" />
+    <ClInclude Include="include\queue\ReusableLinkQueue.h" />
+    <ClInclude Include="include\SqList.h" />
+    <ClInclude Include="include\stack\SharedStack.h" />
+    <ClInclude Include="include\stack\Stack.h" />
+    <ClInclude Include="include\stack\StackImpl2.h" />
+    <ClInclude Include="include\String.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\bitree\BiTree.c" />
+    <ClCompile Include="src\bitree\BstTree.c" />
+    <ClCompile Include="src\ForwardList.c" />
+    <ClCompile Include="src\queue\LinkQueue.c" />
+    <ClCompile Include="src\queue\Queue.c" />
+    <ClCompile Include="src\queue\QueueImpl2.c" />
+    <ClCompile Include="src\queue\QueueImpl3.c" />
+    <ClCompile Include="src\queue\ReusableLinkQueue.c" />
+    <ClCompile Include="src\SqList.c" />
+    <ClCompile Include="src\stack\SharedStack.c" />
+    <ClCompile Include="src\stack\Stack.c" />
+    <ClCompile Include="src\stack\StackImpl2.c" />
+    <ClCompile Include="src\Startup.c" />
+    <ClCompile Include="src\String.c" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -127,37 +158,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="BiTree.h" />
-    <ClInclude Include="BstTree.h" />
-    <ClInclude Include="ForwardList.h" />
-    <ClInclude Include="LinkQueue.h" />
-    <ClInclude Include="Queue.h" />
-    <ClInclude Include="QueueImpl2.h" />
-    <ClInclude Include="QueueImpl3.h" />
-    <ClInclude Include="ReusableLinkQueue.h" />
-    <ClInclude Include="SharedStack.h" />
-    <ClInclude Include="SqList.h" />
-    <ClInclude Include="Stack.h" />
-    <ClInclude Include="StackImpl2.h" />
-    <ClInclude Include="String.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="BiTree.c" />
-    <ClCompile Include="BstTree.c" />
-    <ClCompile Include="ForwardList.c" />
-    <ClCompile Include="LinkQueue.c" />
-    <ClCompile Include="Queue.c" />
-    <ClCompile Include="QueueImpl2.c" />
-    <ClCompile Include="QueueImpl3.c" />
-    <ClCompile Include="ReusableLinkQueue.c" />
-    <ClCompile Include="SharedStack.c" />
-    <ClCompile Include="SqList.c" />
-    <ClCompile Include="Stack.c" />
-    <ClCompile Include="StackImpl2.c" />
-    <ClCompile Include="Startup.c" />
-    <ClCompile Include="String.c" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
