@@ -1,3 +1,8 @@
 .git
 .vs
 x64
+.vscode
+obj
+*.o
+*.bak
+*.exe

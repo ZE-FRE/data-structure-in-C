@@ -1,4 +1,5 @@
 ﻿#include <stdio.h>
+#include <stdlib.h>
 #include "../include/SqList.h"
 #include "../include/ForwardList.h"
 #include "../include/stack/Stack.h"
@@ -42,5 +43,6 @@ int main(int argc, char* argv[])
 
 	//testBstTree();
 
+	system("pause");
 	return 0;
 }
