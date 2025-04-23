@@ -14,11 +14,11 @@ header_prerequisites=$(include_dir)/SqList.h $(include_dir)/ForwardList.h $(incl
 $(include_stack)/SharedStack.h $(include_queue)/Queue.h $(include_queue)/QueueImpl2.h $(include_queue)/QueueImpl3.h $(include_queue)/LinkQueue.h \
 $(include_queue)/ReusableLinkQueue.h $(include_bitree)/BiTree.h $(include_bitree)/BiTree.h
 
-obj_prerequisites=$(obj_dir)/SqList.o $(obj_dir)/ForwardList.o $(obj_dir)/String.o $(obj_dir)/Stack.o $(obj_dir)/StackImpl2.o $(obj_dir)/SharedStack.o $(obj_dir)/Queue.o \
-$(obj_dir)/QueueImpl2.o $(obj_dir)/QueueImpl3.o $(obj_dir)/LinkQueue.o $(obj_dir)/ReusableLinkQueue.o $(obj_dir)/BiTree.o $(obj_dir)/BstTree.o $(obj_dir)/Startup.o
+obj_prerequisites=$(addprefix $(obj_dir)/, SqList.o ForwardList.o String.o Stack.o StackImpl2.o SharedStack.o Queue.o QueueImpl2.o QueueImpl3.o LinkQueue.o ReusableLinkQueue.o BiTree.o BstTree.o Startup.o)
 
-
-startup : $(obj_prerequisites)
+# 管道符号"|"前面的是normal prerequisites，后面的是order-only prerequisites
+# order-only prerequisites的区别是：若它被build，并不会rebuild target
+startup : $(obj_prerequisites) | $(obj_dir)
 # 链接，生成可执行文件
 	gcc -o startup $(obj_prerequisites)
 
@@ -53,9 +53,13 @@ $(obj_dir)/BstTree.o : $(include_bitree)/BiTree.h $(include_bitree)/BstTree.h
 	gcc -c $(src_bitree)/BstTree.c
 	
 $(obj_dir)/Startup.o : $(header_prerequisites)
+	gcc -c $(src_dir)/Startup.c
+	
+
+$(obj_dir):
 # 创建存放目标文件的目录
 	-cmd /c mkdir $(obj_dir)
-	gcc -c $(src_dir)/Startup.c
+# 把所有目标文件移动到目标目录中
 	mv *.o $(obj_dir)/
 	
 .PHONE : clean
