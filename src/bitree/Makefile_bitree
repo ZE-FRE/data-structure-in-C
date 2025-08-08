@@ -1,0 +1,6 @@
+$(bitree_objects) : $(bitree_src)/%.o : $(bitree_src)/%.c
+	gcc -c $< -o $@
+
+.PHONY : clean_bitree
+clean_bitree:
+	rm -rf $(bitree_src)/*.o

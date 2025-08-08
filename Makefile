@@ -1,69 +1,23 @@
-include_dir=./include
-include_stack=./include/stack
-include_queue=./include/queue
-include_bitree=./include/bitree
+# 2025-08-08学习成果试验：静态模式、include以及嵌套make
 
-src_dir=./src
-src_stack=./src/stack
-src_queue=./src/queue
-src_bitree=./src/bitree
+export obj_dir := obj
 
-obj_dir=obj
+bitree_src := src/bitree
+bitree_sources:=$(wildcard $(bitree_src)/*.c)
+# 把src/bitree目录下的.c文件名全替换为.o文件名，然后赋予变量bitree_objects
+bitree_objects:=$(bitree_sources:$(bitree_src)/%.c=$(bitree_src)/%.o)
 
-header_prerequisites=$(include_dir)/SqList.h $(include_dir)/ForwardList.h $(include_dir)/String.h $(include_stack)/Stack.h $(include_stack)/StackImpl2.h \
-$(include_stack)/SharedStack.h $(include_queue)/Queue.h $(include_queue)/QueueImpl2.h $(include_queue)/QueueImpl3.h $(include_queue)/LinkQueue.h \
-$(include_queue)/ReusableLinkQueue.h $(include_bitree)/BiTree.h $(include_bitree)/BiTree.h
+startup : $(bitree_objects) make_src
+	@echo "starting link"
+	gcc -o startup src/*.o src/stack/*.o src/queue/*.o src/bitree/*.o
 
-obj_prerequisites=$(addprefix $(obj_dir)/, SqList.o ForwardList.o String.o Stack.o StackImpl2.o SharedStack.o Queue.o QueueImpl2.o QueueImpl3.o LinkQueue.o ReusableLinkQueue.o BiTree.o BstTree.o Startup.o)
+make_src:
+	make -C src
 
-# 管道符号"|"前面的是normal prerequisites，后面的是order-only prerequisites
-# order-only prerequisites的区别是：若它被build，并不会rebuild target
-startup : $(obj_prerequisites) | $(obj_dir)
-# 链接，生成可执行文件
-	gcc -o startup $(obj_prerequisites)
+# 体验include的效果
+include src/bitree/Makefile_bitree
 
-$(obj_dir)/SqList.o : $(include_dir)/SqList.h $(src_dir)/SqList.c
-	gcc -c $(src_dir)/SqList.c
-$(obj_dir)/ForwardList.o : $(include_dir)/ForwardList.h
-	gcc -c $(src_dir)/ForwardList.c
-$(obj_dir)/String.o : $(include_dir)/String.h
-	gcc -c $(src_dir)/String.c
-	
-$(obj_dir)/Stack.o : $(include_stack)/Stack.h $(include_bitree)/BiTree.h
-	gcc -c $(src_stack)/Stack.c
-$(obj_dir)/StackImpl2.o : $(include_stack)/StackImpl2.h
-	gcc -c $(src_stack)/StackImpl2.c
-$(obj_dir)/SharedStack.o : $(include_stack)/SharedStack.h
-	gcc -c $(src_stack)/SharedStack.c
-
-$(obj_dir)/Queue.o : $(include_queue)/Queue.h
-	gcc -c $(src_queue)/Queue.c
-$(obj_dir)/QueueImpl2.o : $(include_queue)/QueueImpl2.h
-	gcc -c $(src_queue)/QueueImpl2.c
-$(obj_dir)/QueueImpl3.o : $(include_queue)/QueueImpl3.h
-	gcc -c $(src_queue)/QueueImpl3.c
-$(obj_dir)/LinkQueue.o : $(include_queue)/LinkQueue.h
-	gcc -c $(src_queue)/LinkQueue.c
-$(obj_dir)/ReusableLinkQueue.o : $(include_queue)/ReusableLinkQueue.h $(include_bitree)/BiTree.h
-	gcc -c $(src_queue)/ReusableLinkQueue.c
-	
-$(obj_dir)/BiTree.o : $(include_bitree)/BiTree.h $(include_stack)/Stack.h $(include_queue)/ReusableLinkQueue.h
-	gcc -c $(src_dir)/bitree/BiTree.c
-$(obj_dir)/BstTree.o : $(include_bitree)/BiTree.h $(include_bitree)/BstTree.h
-	gcc -c $(src_bitree)/BstTree.c
-	
-$(obj_dir)/Startup.o : $(header_prerequisites)
-	gcc -c $(src_dir)/Startup.c
-	
-
-$(obj_dir):
-# 创建存放目标文件的目录
-	-cmd /c mkdir $(obj_dir)
-# 把所有目标文件移动到目标目录中
-	mv *.o $(obj_dir)/
-	
-.PHONE : clean
-clean:
-	rm -rf $(obj_dir)/* startup.exe
-# 删除目标文件目录
-	-cmd /c rd /s /q $(obj_dir)
+.PHONY : clean
+clean : clean_bitree
+	rm -rf startup.*
+	make -C src clean
