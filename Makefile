@@ -1,4 +1,5 @@
 # 2025-08-08学习成果试验：静态模式、include以及嵌套make
+# 2025-08-12学习成果：自动生成依赖
 
 export obj_dir := obj
 
@@ -17,7 +18,7 @@ make_src:
 # 体验include的效果
 include src/bitree/Makefile_bitree
 
-.PHONY : clean
+.PHONY : make_src clean
 clean : clean_bitree
 	rm -rf startup.*
 	make -C src clean
