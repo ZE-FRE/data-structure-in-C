@@ -6,16 +6,15 @@ objects:=$(sources:%.c=%.o)
 # -MM表示输出.o文件依赖的.h文件和对应的.c文件
 CPARAM:= -MM
 
-.PHONY : compile clean
+.PHONY : clean
 
 compile : $(objects)
 	@echo "Building: $(objects)"
-
+	
 $(dependencies) : %.d : %.c
 	rm -rf $@;\
-	gcc $(CPARAM) $< > $@.$$$$;\
-	sed 's,\($*\).o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@;\
-	rm -rf $@.$$$$
+	gcc $(CPARAM) $< > $@;\
+	echo "	gcc -c $< -o $*.o" >> $@
 
 include $(dependencies)
 
