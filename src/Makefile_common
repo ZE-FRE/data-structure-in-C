@@ -1,0 +1,44 @@
+# 指定使用bash来执行此Makefile中的命令
+SHELL=bash
+
+dependencies_dir:=dependencies
+objects_dir:=obj
+
+sources:=$(wildcard *.c)
+dependencies:=$(sources:%.c=$(dependencies_dir)/%.d)
+# 把目录下的.c文件名全替换为.o文件名，然后赋予变量objects
+objects:=$(sources:%.c=$(objects_dir)/%.o)
+
+# -MM表示输出.o文件依赖的.h文件和对应的.c文件
+CPARAM:= -MM
+
+.PHONY : compile clean
+
+compile : $(objects_dir) $(objects)
+	@echo "compile: $(objects)"
+	
+$(dependencies) : $(dependencies_dir)/%.d : %.c | $(dependencies_dir)
+	rm -rf $@;\
+	gcc $(CPARAM) $< > $@.$$$$;\
+	echo "	gcc -c $< -o $*.o" >> $@.$$$$;\
+	echo -n "$(objects_dir)/" > $@ && cat $@.$$$$ >> $@;\
+	rm -rf $@.$$$$;\
+	mv $@ $(dependencies_dir)/;\
+	echo "	mv $*.o $(objects_dir)/" >> $@
+
+# 环境变量MAKECMDGOALS会存放你所指定的终极目标的列表，如果在命令行上，你没有指定目标，那么，这个变量是空值
+# 执行make时，MAKECMDGOALS的值为空；执行make clean时，MAKECMDGOALS的值为clean
+ifneq ($(MAKECMDGOALS), clean)
+include $(dependencies)
+endif
+
+$(dependencies_dir):
+# 创建存放依赖文件的目录
+	mkdir $(dependencies_dir)
+	
+$(objects_dir):
+# 创建存放目标文件的目录
+	mkdir $(objects_dir)
+
+clean:
+	rm -rf *.d *.o $(dependencies_dir) $(objects_dir)

@@ -7,7 +7,7 @@ objects:=$(sources:%.c=%.o)
 CPARAM:= -MM
 
 compile : $(objects)
-	@echo "Building: $(objects)"
+	@echo "compile: $(objects)"
 	make -C stack
 	make -C queue
 
@@ -17,9 +17,13 @@ $(dependencies) : %.d : %.c
 	sed 's,\($*\).o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@;\
 	rm -rf $@.$$$$
 	
+# 环境变量MAKECMDGOALS会存放你所指定的终极目标的列表，如果在命令行上，你没有指定目标，那么，这个变量是空值
+# 执行make时，MAKECMDGOALS的值为空；执行make clean时，MAKECMDGOALS的值为clean
+ifneq ($(MAKECMDGOALS), clean)
 include $(dependencies)
+endif
 
-.PHONY : clean
+.PHONY : compile clean
 clean:
 	rm -rf *.o *.d
 	make -C stack clean

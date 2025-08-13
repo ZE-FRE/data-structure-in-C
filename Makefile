@@ -9,8 +9,8 @@ bitree_sources:=$(wildcard $(bitree_src)/*.c)
 bitree_objects:=$(bitree_sources:$(bitree_src)/%.c=$(bitree_src)/%.o)
 
 startup : $(bitree_objects) make_src
-	@echo "starting link"
-	gcc -o startup src/*.o src/stack/*.o src/queue/*.o src/bitree/*.o
+	@echo "start linking"
+	gcc -o startup src/*.o src/stack/obj/*.o src/queue/obj/*.o src/bitree/*.o
 
 make_src:
 	make -C src
@@ -20,5 +20,5 @@ include src/bitree/Makefile_bitree
 
 .PHONY : make_src clean
 clean : clean_bitree
-	rm -rf startup.*
+	rm -rf startup.exe
 	make -C src clean
