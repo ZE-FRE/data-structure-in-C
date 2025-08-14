@@ -1,5 +1,5 @@
 # 指定使用bash来执行此Makefile中的命令
-SHELL=bash
+SHELL=sh
 
 dependencies_dir:=dependencies
 objects_dir:=obj
@@ -20,10 +20,9 @@ compile : $(objects_dir) $(objects)
 $(dependencies) : $(dependencies_dir)/%.d : %.c | $(dependencies_dir)
 	rm -rf $@;\
 	gcc $(CPARAM) $< > $@.$$$$;\
-	echo "	gcc -c $< -o $*.o" >> $@.$$$$;\
+	echo "	gcc $(CFLAGS) -c $< -o $*.o" >> $@.$$$$;\
 	echo -n "$(objects_dir)/" > $@ && cat $@.$$$$ >> $@;\
 	rm -rf $@.$$$$;\
-	mv $@ $(dependencies_dir)/;\
 	echo "	mv $*.o $(objects_dir)/" >> $@
 
 # 环境变量MAKECMDGOALS会存放你所指定的终极目标的列表，如果在命令行上，你没有指定目标，那么，这个变量是空值
